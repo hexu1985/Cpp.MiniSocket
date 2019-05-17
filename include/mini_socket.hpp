@@ -25,10 +25,6 @@ typedef int SOCKET;
 
 namespace MiniSocket {
 
-std::tuple<std::string, uint16_t> sock_ntop(const sockaddr *sa, socklen_t salen);
-
-std::string to_string(const sockaddr *sa, socklen_t salen);
-
 class SocketException : public std::runtime_error {
 public:
   SocketException(const std::string &message); 
@@ -38,25 +34,19 @@ public:
 
 class SocketAddressView {
 public:
+    static std::tuple<std::string, uint16_t> getAddressPort(const sockaddr *sa, socklen_t salen);
+    static std::string toString(const sockaddr *sa, socklen_t salen);
+
+public:
     SocketAddressView(const sockaddr *addrVal = NULL, socklen_t addrLenVal = 0);
 
-    std::string toString() const
-    {
-        return to_string(getSockaddr(), getSockaddrLen());
-    }
+    std::string toString() const;
 
-    std::tuple<std::string, uint16_t> getAddressPort() const
-    {
-        return sock_ntop(getSockaddr(), getSockaddrLen());
-    }
+    std::tuple<std::string, uint16_t> getAddressPort() const;
 
-    const sockaddr *getSockaddr() const {
-        return addr_;
-    }
+    const sockaddr *getSockaddr() const; 
 
-    socklen_t getSockaddrLen() const {
-        return addrLen_;
-    }
+    socklen_t getSockaddrLen() const; 
 
 private:
     const sockaddr *addr_;
@@ -71,23 +61,13 @@ public:
 
     bool setAddressPort(const char *address, uint16_t port); 
 
-    std::string toString() const
-    {
-        return to_string(getSockaddr(), getSockaddrLen());
-    }
+    std::string toString() const;
 
-    std::tuple<std::string, uint16_t> getAddressPort() const
-    {
-        return sock_ntop(getSockaddr(), getSockaddrLen());
-    }
+    std::tuple<std::string, uint16_t> getAddressPort() const;
 
-    sockaddr *getSockaddr() const {
-        return (sockaddr *)&addr_;
-    }
+    sockaddr *getSockaddr() const; 
 
-    socklen_t getSockaddrLen() const {
-        return addrLen_;
-    }
+    socklen_t getSockaddrLen() const; 
 
 private:
     sockaddr_storage addr_;
