@@ -1,6 +1,7 @@
 #include "mini_socket.hpp"
 
 #include <sstream>
+#include <cstring>
 
 using namespace std;
 
@@ -8,8 +9,8 @@ namespace MiniSocket {
 
 tuple<string, uint16_t> sock_ntop(const sockaddr *sa, socklen_t salen)
 {
-    static const tuple<string, uint16_t> null_result;
-    char str[128] = {0};
+	static const tuple<string, uint16_t> null_result;
+	char str[128] = {0};
 
 	switch (sa->sa_family) {
 	case AF_INET: {
@@ -24,7 +25,7 @@ tuple<string, uint16_t> sock_ntop(const sockaddr *sa, socklen_t salen)
 	case AF_INET6: {
 		sockaddr_in6	*sin6 = (sockaddr_in6 *) sa;
 
-		if (inet_ntop(AF_INET6, &sin6->sin6_addr, str + 1, sizeof(str) - 1) == NULL)
+		if (inet_ntop(AF_INET6, &sin6->sin6_addr, str, sizeof(str)) == NULL)
 			return null_result;
 
         return make_tuple(std::string(str), ntohs(sin6->sin6_port));
