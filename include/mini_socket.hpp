@@ -15,12 +15,31 @@
 #include <string>
 #include <tuple>
 #include <stdexcept>
+#include <memory>
 
 #if defined WIN32 or defined _WIN32
-#else
+namespace MiniSocket {
+
+class _WSAStartupHolder_;
+
+class _WSAStartupSharedHolder_ {
+public:
+    _WSAStartupSharedHolder_(); 
+    ~_WSAStartupSharedHolder_(); 
+
+private:
+    std::shared_ptr<_WSAStartupHolder_> sharedHolder_;
+};
+
+static _WSAStartupSharedHolder_ _wsa_startup_shared_holder_;
+
+}   // namespace MiniSocket
+#else   // not WIN32
+
 typedef int SOCKET;
 #define INVALID_SOCKET (-1)
 #define SOCKET_ERROR (-1)
+
 #endif
 
 namespace MiniSocket {
