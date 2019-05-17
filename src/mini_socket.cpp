@@ -61,7 +61,31 @@ _WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()
 #endif
 }
 
+string getLastSystemErrorStr()
+{
+    HLOCAL hlocal = NULL;
+    FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL,
+        WSAGetLastError(), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+        (LPTSTR) &hlocal, 0, NULL);
+    std::string err_msg((const char *)hlocal);
+    LocalFree(hlocal);
+
+    return err_msg;
 }
+
+}
+
+#else   // not win32
+
+namespace MiniSocket {
+
+string getLastSystemErrorStr()
+{
+    return strerror(errno);
+}
+
+}   // namespace MiniSocket
 
 #endif
 
@@ -214,6 +238,45 @@ sockaddr *SocketAddress::getSockaddr() const
 socklen_t SocketAddress::getSockaddrLen() const 
 {
     return addrLen_;
+}
+
+// Socket
+Socket::~Socket()
+{
+    if (isValid())
+        closeSocket();
+}
+
+void Socket::closeSocket()
+{
+#if defined WIN32 or defined _WIN32
+  closesocket(sockDesc_);
+#else
+  shutdown(sockDesc_, SHUT_RD);
+  close(sockDesc_);
+#endif
+  sockDesc_ = INVALID_SOCKET;
+}
+
+bool Socket::isValid() const
+{
+    return sockDesc_ != INVALID_SOCKET && sockDesc_ >= 0;
+}
+
+Socket::Socket()
+{
+}
+
+void Socket::createSocket(int domain, int type, int protocol)
+{
+    if (isValid())
+        closeSocket();
+
+    sockDesc_ = socket(domain, type, protocol);
+    if (!isValid()) {
+        throw SocketException(string("Can't create socket : "), 
+                getLastSystemErrorStr());
+    }
 }
 
 }   // namesapce MiniSocket

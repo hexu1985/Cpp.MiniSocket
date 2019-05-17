@@ -44,6 +44,7 @@ typedef int SOCKET;
 
 namespace MiniSocket {
 
+// SocketException
 class SocketException : public std::runtime_error {
 public:
   SocketException(const std::string &message); 
@@ -51,6 +52,7 @@ public:
   SocketException(const std::string &message, const std::string &detail);
 };
 
+// SocketAddressView
 class SocketAddressView {
 public:
     static std::tuple<std::string, uint16_t> getAddressPort(const sockaddr *sa, socklen_t salen);
@@ -72,6 +74,7 @@ private:
     socklen_t addrLen_;
 };
 
+// SocketAddress 
 class SocketAddress {
 public:
     SocketAddress(); 
@@ -91,6 +94,27 @@ public:
 private:
     sockaddr_storage addr_;
     socklen_t addrLen_;
+};
+
+// Socket
+class Socket {
+public:
+  virtual ~Socket();
+
+  void closeSocket();
+
+  bool isValid() const;
+
+private:
+  Socket(const Socket &sock) = delete;
+  void operator=(const Socket &sock) = delete;
+
+protected:
+  SOCKET sockDesc_ = INVALID_SOCKET;
+
+  Socket();
+
+  void createSocket(int domain, int type, int protocol);
 };
 
 }   // MiniSocket
