@@ -101,9 +101,13 @@ class Socket {
 public:
   virtual ~Socket();
 
+  void createSocket(int domain, int type, int protocol);
+
   void closeSocket();
 
   bool isValid() const;
+
+  SocketAddress getLocalAddress() const;
 
 private:
   Socket(const Socket &sock) = delete;
@@ -113,8 +117,20 @@ protected:
   SOCKET sockDesc_ = INVALID_SOCKET;
 
   Socket();
+};
 
-  void createSocket(int domain, int type, int protocol);
+// CommunicatingSocket 
+class CommunicatingSocket : public Socket {
+public:
+    void bind(const SocketAddress &localAddress);
+
+    void connect(const SocketAddress &foreignAddress);
+
+    size_t send(const char *buffer, int bufferLen); 
+
+    size_t recv(char *buffer, int bufferLen); 
+
+    SocketAddress getForeignAddress() const;
 };
 
 }   // MiniSocket

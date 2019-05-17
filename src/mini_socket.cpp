@@ -177,7 +177,7 @@ socklen_t SocketAddressView::getSockaddrLen() const
     return addrLen_;
 }
 
-SocketAddress::SocketAddress(): addrLen_(0)
+SocketAddress::SocketAddress(): addrLen_(sizeof(sockaddr_storage))
 {
     memset(&addr_, 0, sizeof(addr_));
 }
@@ -260,10 +260,23 @@ void Socket::closeSocket()
 
 bool Socket::isValid() const
 {
-    return sockDesc_ != INVALID_SOCKET && sockDesc_ >= 0;
+    return sockDesc_ != INVALID_SOCKET; 
 }
 
-Socket::Socket()
+SocketAddress Socket::getLocalAddress() const
+{
+    sockaddr_storage addr;
+    socklen_t addrLen = sizeof(addr);
+
+    if (getsockname(sockDesc_, (sockaddr *) &addr, &addrLen) != 0) {
+        throw SocketException("Fetch of local address failed (getsockname())",
+                getLastSystemErrorStr());
+    }
+
+    return SocketAddress((sockaddr *)&addr, addrLen);
+}
+
+Socket::Socket(): sockDesc_(INVALID_SOCKET)
 {
 }
 
@@ -274,9 +287,61 @@ void Socket::createSocket(int domain, int type, int protocol)
 
     sockDesc_ = socket(domain, type, protocol);
     if (!isValid()) {
-        throw SocketException(string("Can't create socket : "), 
+        throw SocketException("Can't create socket", 
                 getLastSystemErrorStr());
     }
+}
+
+// CommunicatingSocket 
+void CommunicatingSocket::bind(const SocketAddress &localAddress)
+{
+    if (::bind(sockDesc_, localAddress.getSockaddr(), localAddress.getSockaddrLen()) != 0) {
+        throw SocketException("bind error", 
+                getLastSystemErrorStr());
+    }
+}
+
+void CommunicatingSocket::connect(const SocketAddress &foreignAddress)
+{
+    if (::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen()) != 0) {
+        throw SocketException("connect error", 
+                getLastSystemErrorStr());
+    }
+}
+
+size_t CommunicatingSocket::send(const char *buffer, int bufferLen)
+{
+    int n = ::send(sockDesc_, buffer, bufferLen, 0);
+    if ( n < 0 ) {
+        throw SocketException("Send failed (send())",
+                getLastSystemErrorStr());
+    }
+
+    return n;
+}
+
+size_t CommunicatingSocket::recv(char *buffer, int bufferLen)
+{
+    int n = ::recv(sockDesc_, buffer, bufferLen, 0); 
+    if ( n < 0 ) {
+        throw SocketException("Receive failed (recv())",
+                getLastSystemErrorStr());
+    }
+
+    return n;
+}
+
+SocketAddress CommunicatingSocket::getForeignAddress() const
+{
+    sockaddr_storage addr;
+    socklen_t addrLen = sizeof(addr);
+
+    if (getpeername(sockDesc_, (sockaddr *) &addr, &addrLen) != 0) {
+        throw SocketException("Fetch of foreign address failed (getpeername())",
+                getLastSystemErrorStr());
+    }
+
+    return SocketAddress((sockaddr *)&addr, addrLen);
 }
 
 }   // namesapce MiniSocket
