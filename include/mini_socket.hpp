@@ -71,8 +71,8 @@ public:
     socklen_t getSockaddrLen() const; 
 
 private:
-    const sockaddr *addr_;
-    socklen_t addrLen_;
+    const sockaddr *addr_ = 0;
+    socklen_t addrLen_ = 0;
 };
 
 // SocketAddress 
@@ -94,38 +94,39 @@ public:
 
 private:
     sockaddr_storage addr_;
-    socklen_t addrLen_;
+    socklen_t addrLen_ = sizeof (sockaddr_storage);
 };
 
 // Socket
 class Socket {
 public:
-  virtual ~Socket();
+    virtual ~Socket();
 
-  void createSocket(int domain, int type, int protocol);
+    void createSocket(int domain, int type, int protocol);
 
-  void closeSocket();
+    void closeSocket();
 
-  bool isValid() const;
+    bool isValid() const;
 
-  SocketAddress getLocalAddress() const;
+    SocketAddress getLocalAddress() const;
+
+    void bind(const SocketAddress &localAddress);
 
 private:
-  Socket(const Socket &sock) = delete;
-  void operator=(const Socket &sock) = delete;
+    Socket(const Socket &sock) = delete;
+    void operator=(const Socket &sock) = delete;
 
 protected:
-  SOCKET sockDesc_ = INVALID_SOCKET;
+    SOCKET sockDesc_ = INVALID_SOCKET;
 
-  Socket();
+    Socket();
 };
 
 // CommunicatingSocket 
 class CommunicatingSocket : public Socket {
 public:
-    void bind(const SocketAddress &localAddress);
-
     void connect(const SocketAddress &foreignAddress);
+    bool connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value);
 
     size_t send(const char *buffer, int bufferLen); 
 
@@ -136,6 +137,7 @@ public:
 
 class TCPSocket : public CommunicatingSocket {
 public:
+    TCPSocket();
     TCPSocket(const SocketAddress &foreignAddress); 
 
     void sendAll(const char *buffer, int bufferLen); 
@@ -156,6 +158,5 @@ public:
 
     std::shared_ptr<TCPSocket> accept();
 };
-
 
 }   // MiniSocket

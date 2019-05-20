@@ -292,8 +292,7 @@ void Socket::createSocket(int domain, int type, int protocol)
     }
 }
 
-// CommunicatingSocket 
-void CommunicatingSocket::bind(const SocketAddress &localAddress)
+void Socket::bind(const SocketAddress &localAddress)
 {
     if (::bind(sockDesc_, localAddress.getSockaddr(), localAddress.getSockaddrLen()) != 0) {
         throw SocketException("bind error", 
@@ -301,12 +300,19 @@ void CommunicatingSocket::bind(const SocketAddress &localAddress)
     }
 }
 
+// CommunicatingSocket 
 void CommunicatingSocket::connect(const SocketAddress &foreignAddress)
 {
     if (::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen()) != 0) {
         throw SocketException("connect error", 
                 getLastSystemErrorStr());
     }
+}
+
+bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value)
+{
+    int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
+    return (ret == 0);
 }
 
 size_t CommunicatingSocket::send(const char *buffer, int bufferLen)
@@ -392,6 +398,10 @@ private:
 };
 
 // TCPSocket 
+TCPSocket::TCPSocket()
+{
+}
+
 TCPSocket::TCPSocket(SOCKET sockDesc)
 {
     sockDesc_ = sockDesc;
@@ -425,5 +435,23 @@ std::iostream &TCPSocket::getStream()
     return *myStream_;
 }
 
+// TCPServerSocket
+TCPServerSocket::TCPServerSocket(const SocketAddress &localAddress)
+{
+    int domain = localAddress.getSockaddr()->sa_family;
+    createSocket(domain, SOCK_STREAM, 0);
+    bind(localAddress);
+}
+
+shared_ptr<TCPSocket> TCPServerSocket::accept()
+{
+    SOCKET newConnSD;
+    if ((newConnSD = ::accept(sockDesc_, NULL, 0)) == INVALID_SOCKET) {
+        throw SocketException("Accept failed (accept())",
+                getLastSystemErrorStr());
+    }
+
+    return shared_ptr<TCPSocket>(new TCPSocket(newConnSD));
+}
 
 }   // namesapce MiniSocket
