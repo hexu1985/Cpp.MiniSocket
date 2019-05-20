@@ -156,6 +156,8 @@ class TCPServerSocket : public Socket {
 public:
     TCPServerSocket(const SocketAddress &localAddress); 
 
+	void listen(int backlog);
+
     std::shared_ptr<TCPSocket> accept();
 };
 

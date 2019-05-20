@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cstring>
 #include "mini_socket.hpp"
 
 using namespace std;

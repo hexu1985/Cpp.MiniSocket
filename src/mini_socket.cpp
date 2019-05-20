@@ -441,6 +441,16 @@ TCPServerSocket::TCPServerSocket(const SocketAddress &localAddress)
     int domain = localAddress.getSockaddr()->sa_family;
     createSocket(domain, SOCK_STREAM, 0);
     bind(localAddress);
+	const int LISTENQ = 1024;
+	listen(LISTENQ);
+}
+
+void TCPServerSocket::listen(int backlog)
+{
+    if (::listen(sockDesc_, backlog) != 0) {
+        throw SocketException("listen error", 
+                getLastSystemErrorStr());
+    }
 }
 
 shared_ptr<TCPSocket> TCPServerSocket::accept()
