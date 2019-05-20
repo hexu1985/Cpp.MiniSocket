@@ -7,21 +7,28 @@ CXXFLAGS = -Wall -g -std=c++11 -DNDEBUG
 INCLUDES = -I../../include
 LDFLAGS = -lpthread
 LDPATH =
+VPATH = ../../src
 
 ifeq ($(OS), Windows_NT)
 	CXXFLAGS += -D_WIN32_WINNT=0x0600 # _WIN32_WINNT for inet_ntop
 	LDFLAGS = -lwsock32 -lws2_32 #-lpthread 
 endif
 
-SOURCES = $(shell ls *.cpp)
-PROGS = $(SOURCES:%.cpp=%)
+PROGS =	tcpcli tcpserv 
 
 all: $(PROGS)
 	@echo "PROGS = $(PROGS)" 
 
 clean:
 	@echo "OS: $(OS)"
-	$(RM) $(PROGS)
+	$(RM) $(PROGS) *.o
 
-%: %.cpp
-	$(CXX) -o $@ ../../src/mini_socket.cpp $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH) 
+%.o: %.cpp
+	$(CXX) -c $(INCLUDES) $(CXXFLAGS) -o $@ $^
+
+tcpcli:	tcpcli.o str_cli.o mini_socket.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
+
+tcpserv:	tcpserv.o str_echo.o mini_socket.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
+

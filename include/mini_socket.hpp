@@ -1,3 +1,5 @@
+#ifndef PNL_MINI_SOCKET_INC
+#define PNL_MINI_SOCKET_INC
 
 #if defined WIN32 or defined _WIN32
 #include <winsock2.h>
@@ -162,3 +164,5 @@ public:
 };
 
 }   // MiniSocket
+
+#endif
