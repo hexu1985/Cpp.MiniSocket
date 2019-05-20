@@ -16,6 +16,7 @@
 #include <tuple>
 #include <stdexcept>
 #include <memory>
+#include <iostream>
 
 #if defined WIN32 or defined _WIN32
 namespace MiniSocket {
@@ -132,5 +133,29 @@ public:
 
     SocketAddress getForeignAddress() const;
 };
+
+class TCPSocket : public CommunicatingSocket {
+public:
+    TCPSocket(const SocketAddress &foreignAddress); 
+
+    void sendAll(const char *buffer, int bufferLen); 
+
+    std::iostream &getStream(); 
+
+private:
+    friend class TCPServerSocket;
+    TCPSocket(SOCKET sockDesc);
+
+    std::iostream *myStream_ = 0;
+    std::streambuf *myStreambuf_ = 0;
+};
+
+class TCPServerSocket : public Socket {
+public:
+    TCPServerSocket(const SocketAddress &localAddress); 
+
+    std::shared_ptr<TCPSocket> accept();
+};
+
 
 }   // MiniSocket
