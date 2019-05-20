@@ -3,7 +3,7 @@ OS ?= $(shell uname -s)
 
 RM = rm -f
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++11 
+CXXFLAGS = -Wall -g -std=c++11 -DNDEBUG
 INCLUDES = -I../include
 LDFLAGS = -lpthread
 LDPATH =
