@@ -95,8 +95,20 @@ public:
     socklen_t getSockaddrLen() const; 
 
 private:
-    sockaddr_storage addr_;
+    sockaddr_storage addr_ = {};
     socklen_t addrLen_ = sizeof (sockaddr_storage);
+};
+
+// IPVersion
+enum class IPVersion {
+    IPv4 = AF_INET,
+    IPv6 = AF_INET6,
+};
+
+// TransportLayerType 
+enum class TransportLayerType {
+    TCP = SOCK_STREAM,
+    UDP = SOCK_DGRAM,
 };
 
 // Socket
@@ -104,11 +116,11 @@ class Socket {
 public:
     virtual ~Socket();
 
-    void createSocket(int domain, int type, int protocol);
+    void open(IPVersion version, TransportLayerType type);
 
-    void closeSocket();
+    void close();
 
-    bool isValid() const;
+    bool isOpened() const;
 
     SocketAddress getLocalAddress() const;
 
@@ -121,25 +133,28 @@ private:
 protected:
     SOCKET sockDesc_ = INVALID_SOCKET;
 
-    Socket();
+    Socket() = default;
+    void createSocket(int domain, int type, int protocol);
 };
 
 // CommunicatingSocket 
 class CommunicatingSocket : public Socket {
 public:
+    CommunicatingSocket() = default; 
+
     void connect(const SocketAddress &foreignAddress);
     bool connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value);
 
-    size_t send(const char *buffer, int bufferLen); 
+    int send(const char *buffer, int bufferLen); 
 
-    size_t recv(char *buffer, int bufferLen); 
+    int recv(char *buffer, int bufferLen); 
 
     SocketAddress getForeignAddress() const;
 };
 
 class TCPSocket : public CommunicatingSocket {
 public:
-    TCPSocket();
+    TCPSocket() = default;
     TCPSocket(const SocketAddress &foreignAddress); 
 
     void sendAll(const char *buffer, int bufferLen); 
@@ -154,6 +169,7 @@ private:
     std::streambuf *myStreambuf_ = 0;
 };
 
+// TCPServerSocket 
 class TCPServerSocket : public Socket {
 public:
     TCPServerSocket(const SocketAddress &localAddress); 
@@ -161,6 +177,19 @@ public:
 	void listen(int backlog);
 
     std::shared_ptr<TCPSocket> accept();
+};
+
+// UDPSocket
+class UDPSocket : public Socket {
+public:
+    UDPSocket() = default;
+    UDPSocket(const SocketAddress &localAddress); 
+
+    int sendTo(const char *buffer, int bufferLen,
+            const SocketAddress &foreignAddress);
+
+    int recvFrom(char *buffer, int bufferLen,
+            SocketAddress &foreignAddress); 
 };
 
 }   // MiniSocket

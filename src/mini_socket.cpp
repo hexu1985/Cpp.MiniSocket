@@ -243,22 +243,27 @@ socklen_t SocketAddress::getSockaddrLen() const
 // Socket
 Socket::~Socket()
 {
-    if (isValid())
-        closeSocket();
+    if (isOpened())
+        close();
 }
 
-void Socket::closeSocket()
+void Socket::open(IPVersion version, TransportLayerType type)
+{
+    createSocket(static_cast<int>(version), static_cast<int>(type), 0);   
+}
+
+void Socket::close()
 {
 #if defined WIN32 or defined _WIN32
   closesocket(sockDesc_);
 #else
   shutdown(sockDesc_, SHUT_RD);
-  close(sockDesc_);
+  ::close(sockDesc_);
 #endif
   sockDesc_ = INVALID_SOCKET;
 }
 
-bool Socket::isValid() const
+bool Socket::isOpened() const
 {
     return sockDesc_ != INVALID_SOCKET; 
 }
@@ -276,17 +281,13 @@ SocketAddress Socket::getLocalAddress() const
     return SocketAddress((sockaddr *)&addr, addrLen);
 }
 
-Socket::Socket(): sockDesc_(INVALID_SOCKET)
-{
-}
-
 void Socket::createSocket(int domain, int type, int protocol)
 {
-    if (isValid())
-        closeSocket();
+    if (isOpened())
+        close();
 
     sockDesc_ = socket(domain, type, protocol);
-    if (!isValid()) {
+    if (!isOpened()) {
         throw SocketException("Can't create socket", 
                 getLastSystemErrorStr());
     }
@@ -315,7 +316,7 @@ bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, const std
     return (ret == 0);
 }
 
-size_t CommunicatingSocket::send(const char *buffer, int bufferLen)
+int CommunicatingSocket::send(const char *buffer, int bufferLen)
 {
     int n = ::send(sockDesc_, buffer, bufferLen, 0);
     if ( n < 0 ) {
@@ -326,7 +327,7 @@ size_t CommunicatingSocket::send(const char *buffer, int bufferLen)
     return n;
 }
 
-size_t CommunicatingSocket::recv(char *buffer, int bufferLen)
+int CommunicatingSocket::recv(char *buffer, int bufferLen)
 {
     int n = ::recv(sockDesc_, buffer, bufferLen, 0); 
     if ( n < 0 ) {
@@ -398,10 +399,6 @@ private:
 };
 
 // TCPSocket 
-TCPSocket::TCPSocket()
-{
-}
-
 TCPSocket::TCPSocket(SOCKET sockDesc)
 {
     sockDesc_ = sockDesc;
@@ -462,6 +459,48 @@ shared_ptr<TCPSocket> TCPServerSocket::accept()
     }
 
     return shared_ptr<TCPSocket>(new TCPSocket(newConnSD));
+}
+
+// UDPSocket
+UDPSocket::UDPSocket(const SocketAddress &localAddress)
+{
+    int domain = localAddress.getSockaddr()->sa_family;
+    createSocket(domain, SOCK_STREAM, 0);
+    bind(localAddress);
+}
+
+int UDPSocket::sendTo(const char *buffer, int bufferLen,
+        const SocketAddress &foreignAddress)
+{
+    if (!isOpened()) {
+        int domain = foreignAddress.getSockaddr()->sa_family;
+        createSocket(domain, SOCK_STREAM, 0);
+    }
+
+    int n = ::sendto(sockDesc_, buffer, bufferLen, 0,
+            foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
+    if ( n < 0 ) {
+        throw SocketException("Send failed (sendto())",
+                getLastSystemErrorStr());
+    }
+
+    return n;
+}
+
+int UDPSocket::recvFrom(char *buffer, int bufferLen,
+            SocketAddress &sourceAddress)
+{
+    sockaddr_storage cliAddr;
+    socklen_t addrLen = sizeof(cliAddr);
+    int n = recvfrom(sockDesc_, buffer, bufferLen, 0,
+            (sockaddr *) &cliAddr, (socklen_t *) &addrLen);
+    if (n < 0) {
+        throw SocketException("Receive failed (recvfrom())",
+                getLastSystemErrorStr());
+    }
+    sourceAddress = SocketAddress((sockaddr *)&cliAddr, addrLen);
+
+    return n;
 }
 
 }   // namesapce MiniSocket
