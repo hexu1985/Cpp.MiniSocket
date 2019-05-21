@@ -465,7 +465,7 @@ shared_ptr<TCPSocket> TCPServerSocket::accept()
 UDPSocket::UDPSocket(const SocketAddress &localAddress)
 {
     int domain = localAddress.getSockaddr()->sa_family;
-    createSocket(domain, SOCK_STREAM, 0);
+    createSocket(domain, SOCK_DGRAM, 0);
     bind(localAddress);
 }
 
@@ -474,7 +474,7 @@ int UDPSocket::sendTo(const char *buffer, int bufferLen,
 {
     if (!isOpened()) {
         int domain = foreignAddress.getSockaddr()->sa_family;
-        createSocket(domain, SOCK_STREAM, 0);
+        createSocket(domain, SOCK_DGRAM, 0);
     }
 
     int n = ::sendto(sockDesc_, buffer, bufferLen, 0,
