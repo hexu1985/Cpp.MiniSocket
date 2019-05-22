@@ -1,6 +1,6 @@
 /**
  * @file mini_socket.hpp
- * @brief 一个简单的跨平台socket API封装(支持win socket和bsd socket)
+ * @brief 一个简单的跨平台的C++网络编程库
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-05-22
@@ -54,11 +54,24 @@ typedef int SOCKET;
 
 namespace MiniSocket {
 
-// SocketException
+/**
+ * @brief MiniSocket库的异常类, 表征任何Socket相关接口的异常
+ */
 class SocketException : public std::runtime_error {
 public:
+    /**
+     * @brief 构造一个SocketException对象
+     *
+     * @param message 异常基本信息
+     */
   SocketException(const std::string &message); 
   
+  /**
+   * @brief 构造一个SocketException对象
+   *
+   * @param message 异常基本信息
+   * @param detail 异常详细信息
+   */
   SocketException(const std::string &message, const std::string &detail);
 };
 
@@ -84,7 +97,9 @@ private:
     socklen_t addrLen_ = 0;
 };
 
-// SocketAddress 
+/**
+ * @brief 封装Socket地址的类, 同时支持IPv4和IPv6
+ */
 class SocketAddress {
 public:
     SocketAddress(); 
