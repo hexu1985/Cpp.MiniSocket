@@ -152,6 +152,7 @@ public:
     SocketAddress getForeignAddress() const;
 };
 
+// TCPSocket
 class TCPSocket : public CommunicatingSocket {
 public:
     TCPSocket() = default;

@@ -1,0 +1,23 @@
+#include "dg_cli.hpp"
+
+#include <string>
+
+using namespace std;
+using namespace MiniSocket;
+
+void
+dg_cli(istream &in, UDPSocket &sock, SocketAddress &addr)
+{
+	int	            n;
+    const int       MAXLINE = 4096;
+	char	        recvline[MAXLINE + 1];
+    SocketAddress   srcAddr;
+    string          sendline;
+    while (getline(in, sendline)) {
+        sock.sendTo(sendline.c_str(), sendline.size(), addr);
+        n = sock.recvFrom(recvline, MAXLINE, srcAddr);
+        recvline[n] = '\0';
+        cout << recvline << endl;
+    }
+}
+
