@@ -1,3 +1,6 @@
+/** \example dg_cli.cpp
+ * The implement of dg_cli function in udp echo client.
+ */
 #include "dg_cli.hpp"
 
 #include <string>

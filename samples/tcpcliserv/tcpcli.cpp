@@ -1,3 +1,6 @@
+/** \example tcpcli.cpp
+ * This is an example of how to use the TCPSocket class to implement tcp echo client.
+ */
 #include <iostream>
 #include <cstdlib>
 #include "mini_socket.hpp"

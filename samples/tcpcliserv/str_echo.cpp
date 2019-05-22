@@ -1,3 +1,6 @@
+/** \example str_echo.cpp
+ * The implement of str_echo function in tcp echo server.
+ */
 #include "str_echo.hpp"
 
 using namespace std;

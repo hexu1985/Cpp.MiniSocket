@@ -1,3 +1,6 @@
+/** \example daytimeudpcli.cpp
+ * This is an example of how to use the UDPSocket class to implement daytimeudp client.
+ */
 #include <iostream>
 #include <cstdlib>
 #include "mini_socket.hpp"

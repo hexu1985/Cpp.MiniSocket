@@ -1,3 +1,6 @@
+/** \example daytimeudpsrv.cpp
+ * This is an example of how to use the UDPSocket class to implement daytimeudp server.
+ */
 #include <string>
 #include <iostream>
 #include <cstdlib>

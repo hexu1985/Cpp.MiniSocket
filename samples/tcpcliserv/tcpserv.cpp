@@ -1,3 +1,6 @@
+/** \example tcpserv.cpp
+ * This is an example of how to use the TCPServerSocket class to implement tcp echo server.
+ */
 #include <string>
 #include <iostream>
 #include <stdexcept>
