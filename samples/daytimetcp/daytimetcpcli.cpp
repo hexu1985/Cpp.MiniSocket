@@ -1,3 +1,6 @@
+/** \example daytimetcpcli.cpp
+ * This is an example of how to use the TCPSocket class to implement daytimetcp client.
+ */
 #include <iostream>
 #include <cstdlib>
 #include "mini_socket.hpp"

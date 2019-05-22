@@ -1,3 +1,6 @@
+/** \example sample_socket_address.cpp
+ * This is an example of how to use the SocketAddress class.
+ */
 #include <iostream>
 #include <cstdlib>
 #include "mini_socket.hpp"
