@@ -1,3 +1,10 @@
+/**
+ * @file mini_socket.hpp
+ * @brief 一个简单的跨平台socket API封装(支持win socket和bsd socket)
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-05-22
+ */
 #ifndef PNL_MINI_SOCKET_INC
 #define PNL_MINI_SOCKET_INC
 
