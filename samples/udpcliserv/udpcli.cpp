@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     }
 
     SocketAddress addr(argv[1], stoi(argv[2]));
-    UDPSocket sock(addr);
+    UDPSocket sock;
 
 	dg_cli(cin, sock, addr);
 
