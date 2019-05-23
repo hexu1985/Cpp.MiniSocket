@@ -383,7 +383,7 @@ public:
 	void listen(int backlog);
 
     /**
-     * @brief 从已完成连接队列对头返回一下个已连接socket
+     * @brief 从已完成连接队列返回一下个已连接socket
      *
      * @return 已连接的TCPSocket对象
      */
