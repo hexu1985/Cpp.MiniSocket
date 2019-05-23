@@ -359,40 +359,44 @@ SocketAddress CommunicatingSocket::getForeignAddress() const
 template <class CharT, class Traits = std::char_traits<CharT> >
 class SocketStreamBuffer : public std::basic_streambuf<CharT, Traits> {
 public:
-  typedef typename Traits::int_type                 int_type;
+    typedef typename Traits::int_type                 int_type;
 
-  SocketStreamBuffer(TCPSocket *sock): sock_(sock) {
-    this->setg(inBuffer_, inBuffer_ + sizeof(inBuffer_),
-         inBuffer_ + sizeof(inBuffer_));
-    this->setp(outBuffer_, outBuffer_ + sizeof(outBuffer_));
-  }
+    SocketStreamBuffer(TCPSocket *sock): sock_(sock) 
+    {
+        this->setg(inBuffer_, inBuffer_ + sizeof(inBuffer_),
+                inBuffer_ + sizeof(inBuffer_));
+        this->setp(outBuffer_, outBuffer_ + sizeof(outBuffer_));
+    }
 
 protected:
-  int_type overflow(int_type c = Traits::eof()) {
-    this->sync();
+  int_type overflow(int_type c = Traits::eof()) 
+  {
+      this->sync();
 
-    if (c != Traits::eof()) {
-      this->sputc(Traits::to_char_type(c));
-    }
+      if (c != Traits::eof()) {
+          this->sputc(Traits::to_char_type(c));
+      }
 
-    return 0;
+      return 0;
   }
 
-  int sync() {
-    sock_->sendAll(outBuffer_, (this->pptr() - outBuffer_) * sizeof(CharT));
-    this->setp(outBuffer_, outBuffer_ + sizeof(outBuffer_));
-    return 0;
+  int sync() 
+  {
+      sock_->sendAll(outBuffer_, (this->pptr() - outBuffer_) * sizeof(CharT));
+      this->setp(outBuffer_, outBuffer_ + sizeof(outBuffer_));
+      return 0;
   }
 
-  int_type underflow() {
-    size_t len = sock_->recv(inBuffer_, sizeof(inBuffer_) * sizeof(CharT));
+  int_type underflow() 
+  {
+      size_t len = sock_->recv(inBuffer_, sizeof(inBuffer_) * sizeof(CharT));
 
-    if (len == 0) {
-      return Traits::eof();
-    }
+      if (len == 0) {
+          return Traits::eof();
+      }
 
-    this->setg(inBuffer_, inBuffer_, inBuffer_ + len / sizeof(CharT));
-    return this->sgetc();
+      this->setg(inBuffer_, inBuffer_, inBuffer_ + len / sizeof(CharT));
+      return this->sgetc();
   }
 
 private:

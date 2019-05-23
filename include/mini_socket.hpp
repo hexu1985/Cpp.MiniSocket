@@ -318,14 +318,37 @@ public:
     SocketAddress getForeignAddress() const;
 };
 
-// TCPSocket
+/**
+ * @brief 面向流的Socket
+ */
 class TCPSocket : public CommunicatingSocket {
 public:
     TCPSocket() = default;
+
+    /**
+     * @brief 创建一个面向流的Socket, 并connect到服务器端地址
+     *
+     * @param foreignAddress 服务器端地址
+     *
+     * @note 可能会抛出SocketException异常
+     */
     TCPSocket(const SocketAddress &foreignAddress); 
 
+    /**
+     * @brief 发送所有数据
+     *
+     * @param buffer 要发送数据的内容
+     * @param bufferLen 数据长度
+     *
+     * @note 可能会抛出SocketException异常
+     */
     void sendAll(const char *buffer, int bufferLen); 
 
+    /**
+     * @brief 获取当前socket的iostream子类
+     *
+     * @return iostream子类
+     */
     std::iostream &getStream(); 
 
 private:
@@ -336,27 +359,74 @@ private:
     std::streambuf *myStreambuf_ = 0;
 };
 
-// TCPServerSocket 
+/**
+ * @brief 面向流的Socket的Server端
+ */
 class TCPServerSocket : public Socket {
 public:
+    TCPServerSocket() = default;
+
+    /**
+     * @brief 创建一个面向流的Socket的Server端, 绑定本地Socket地址, 并监听
+     *
+     * @param localAddress 绑定本地地址
+     */
     TCPServerSocket(const SocketAddress &localAddress); 
 
+    /**
+     * @brief 设置排队队列长度
+     *
+     * @param backlog 排队队列长度 
+     *
+     * @note 当创建一个默认构造TCPServerSocket的时候, 才需要手动调用这个接口
+     */
 	void listen(int backlog);
 
+    /**
+     * @brief 从已完成连接队列对头返回一下个已连接socket
+     *
+     * @return 已连接的TCPSocket对象
+     */
     std::shared_ptr<TCPSocket> accept();
 };
 
-// UDPSocket
+/**
+ * @brief 用户报文Socket
+ */
 class UDPSocket : public Socket {
 public:
     UDPSocket() = default;
+
+    /**
+     * @brief 创建一个绑定本地Socket地址UDPSocket
+     *
+     * @param localAddress 本地Socket地址
+     */
     UDPSocket(const SocketAddress &localAddress); 
 
+    /**
+     * @brief 向指定socket地址发送数据
+     *
+     * @param buffer 要发送的数据内容
+     * @param bufferLen 数据长度
+     * @param foreignAddress 远端地址
+     *
+     * @return 已发送数据长度
+     */
     int sendTo(const char *buffer, int bufferLen,
             const SocketAddress &foreignAddress);
 
+    /**
+     * @brief 接收数据
+     *
+     * @param buffer 接收数据缓存地址
+     * @param bufferLen 缓存长度
+     * @param sourceAddress 发送端地址
+     *
+     * @return 接收数据长度
+     */
     int recvFrom(char *buffer, int bufferLen,
-            SocketAddress &foreignAddress); 
+            SocketAddress &sourceAddress); 
 };
 
 }   // MiniSocket
