@@ -251,7 +251,7 @@ Socket::~Socket()
         close();
 }
 
-void Socket::open(IPVersion version, TransportLayerType type)
+void Socket::open(NetworkLayerType version, TransportLayerType type)
 {
     createSocket(static_cast<int>(version), static_cast<int>(type), 0);   
 }

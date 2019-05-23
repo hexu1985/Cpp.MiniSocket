@@ -194,7 +194,7 @@ private:
 };
 
 /// IP版本号
-enum class IPVersion {
+enum class NetworkLayerType {
     IPv4 = AF_INET,     /**< IPv4版本 */
     IPv6 = AF_INET6,    /**< IPv6版本 */
 };
@@ -205,19 +205,48 @@ enum class TransportLayerType {
     UDP = SOCK_DGRAM,   /**< UDP协议 */
 };
 
-// Socket
+/**
+ * @brief 封装socket文件描述符的类, 所有具体socket功能类的基类
+ */
 class Socket {
 public:
+    /**
+     * @brief 虚析构函数函数, 子类根据需要override
+     */
     virtual ~Socket();
 
-    void open(IPVersion version, TransportLayerType type);
+    /**
+     * @brief 打开socket
+     *
+     * @param version 网络层协议版本
+     * @param type 传输层协议版本
+     */
+    void open(NetworkLayerType version, TransportLayerType type);
 
+    /**
+     * @brief 关闭socket
+     */
     void close();
 
+    /**
+     * @brief 判断当前socket是否已打开
+     *
+     * @return 如果已打开, 返回true; 否则返回false
+     */
     bool isOpened() const;
 
+    /**
+     * @brief 获取当前socket的本地端地址
+     *
+     * @return socket地址
+     */
     SocketAddress getLocalAddress() const;
 
+    /**
+     * @brief 绑定当前socket的本地端地址
+     *
+     * @param localAddress 本地端地址
+     */
     void bind(const SocketAddress &localAddress);
 
 private:
@@ -231,18 +260,61 @@ protected:
     void createSocket(int domain, int type, int protocol);
 };
 
-// CommunicatingSocket 
+/**
+ * @brief 面向连接的Socket
+ */
 class CommunicatingSocket : public Socket {
 public:
     CommunicatingSocket() = default; 
 
+    /**
+     * @brief 连接到远端地址
+     *
+     * @param foreignAddress 远端地址
+     *
+     * @note 连接失败会抛出SocketException异常
+     */
     void connect(const SocketAddress &foreignAddress);
+
+    /**
+     * @brief 连接到远端地址
+     *
+     * @param foreignAddress 远端地址
+     * @param nothrow_value 传入std::nothrow
+     *
+     * @return 如果连接成功, 返回true; 否则返回false
+     */
     bool connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value);
 
+    /**
+     * @brief 发送数据
+     *
+     * @param buffer 要发送的数据内容
+     * @param bufferLen 数据长度
+     *
+     * @return 返回发送出的数据长度
+     *
+     * @note 可能会抛出SocketException异常, 发送长度也可能会小于bufferLen
+     */
     int send(const char *buffer, int bufferLen); 
 
+    /**
+     * @brief 接收数据
+     *
+     * @param buffer 接收数据缓存地址
+     * @param bufferLen 缓存长度
+     *
+     * @return 接收数据长度
+     *
+     * @note 可能会抛出SocketException异常
+     */
     int recv(char *buffer, int bufferLen); 
 
+    /**
+     * @brief 获取已连接成功的对端地址
+     *
+     * @return 对端socket地址
+     */
     SocketAddress getForeignAddress() const;
 };
 
