@@ -75,21 +75,46 @@ public:
   SocketException(const std::string &message, const std::string &detail);
 };
 
-// SocketAddressView
+/**
+ * @brief 封装Socket地址的引用的类, 同时支持IPv4和IPv6
+ * @note 该类并不管理指向的sockaddr的内存
+ */
 class SocketAddressView {
 public:
-    static std::tuple<std::string, uint16_t> getAddressPort(const sockaddr *sa, socklen_t salen);
-    static std::string toString(const sockaddr *sa, socklen_t salen);
-
-public:
+    /**
+     * @brief 从sockaddr指针创建一个SocketAddressView
+     *
+     * @param addrVal 指向sockaddr的指针
+     * @param addrLenVal 实际sockaddr的长度
+     */
     SocketAddressView(const sockaddr *addrVal = NULL, socklen_t addrLenVal = 0);
 
+    /**
+     * @brief 将SocketAddressView转换成可打印格式
+     *
+     * @return ipv4: xxx.xxx.xxx.xxx:port, ipv6: [xxx:xxx:...:xxx]:port
+     */
     std::string toString() const;
 
+    /**
+     * @brief 获取可打印地址和port号
+     *
+     * @return 包含地址和端口号的元组
+     */
     std::tuple<std::string, uint16_t> getAddressPort() const;
 
+    /**
+     * @brief 转换成sockaddr指针
+     *
+     * @return 指向sockaddr的指针
+     */
     const sockaddr *getSockaddr() const; 
 
+    /**
+     * @brief 获取sockaddr实际的长度
+     *
+     * @return sockaddr长度
+     */
     socklen_t getSockaddrLen() const; 
 
 private:

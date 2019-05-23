@@ -89,21 +89,9 @@ string getLastSystemErrorStr()
 
 #endif
 
-namespace MiniSocket {
+namespace { // anonymous namespace for details
 
-// SocketException
-SocketException::SocketException(const string &message) :
-    runtime_error(message) 
-{
-}
-
-SocketException::SocketException(const string &message, const string &detail) :
-    runtime_error(message + ": " + detail) 
-{
-}
-
-// SocketAddressView
-tuple<string, uint16_t> SocketAddressView::getAddressPort(const sockaddr *sa, socklen_t salen)
+tuple<string, uint16_t> getAddressPort(const sockaddr *sa, socklen_t salen)
 {
 	static const tuple<string, uint16_t> null_result;
 	char str[128] = {0};
@@ -133,7 +121,7 @@ tuple<string, uint16_t> SocketAddressView::getAddressPort(const sockaddr *sa, so
     return null_result;
 }
 
-string SocketAddressView::toString(const sockaddr *sa, socklen_t salen)
+string toString(const sockaddr *sa, socklen_t salen)
 {
     static const std::string null_result;
 
@@ -153,18 +141,34 @@ string SocketAddressView::toString(const sockaddr *sa, socklen_t salen)
     return os.str();
 }
 
+}   // namespace
+
+namespace MiniSocket {
+
+// SocketException
+SocketException::SocketException(const string &message) :
+    runtime_error(message) 
+{
+}
+
+SocketException::SocketException(const string &message, const string &detail) :
+    runtime_error(message + ": " + detail) 
+{
+}
+
+// SocketAddressView
 SocketAddressView::SocketAddressView(const sockaddr *addrVal, socklen_t addrLenVal) : addr_(addrVal), addrLen_(addrLenVal)
 {
 }
 
 string SocketAddressView::toString() const
 {
-    return toString(getSockaddr(), getSockaddrLen());
+    return ::toString(getSockaddr(), getSockaddrLen());
 }
 
 tuple<std::string, uint16_t> SocketAddressView::getAddressPort() const
 {
-    return getAddressPort(getSockaddr(), getSockaddrLen());
+    return ::getAddressPort(getSockaddr(), getSockaddrLen());
 }
 
 const sockaddr *SocketAddressView::getSockaddr() const 
@@ -222,12 +226,12 @@ bool SocketAddress::setAddressPort(const char *address, uint16_t port)
 
 string SocketAddress::toString() const
 {
-    return SocketAddressView::toString(getSockaddr(), getSockaddrLen());
+    return ::toString(getSockaddr(), getSockaddrLen());
 }
 
 tuple<std::string, uint16_t> SocketAddress::getAddressPort() const
 {
-    return SocketAddressView::getAddressPort(getSockaddr(), getSockaddrLen());
+    return ::getAddressPort(getSockaddr(), getSockaddrLen());
 }
 
 sockaddr *SocketAddress::getSockaddr() const 
