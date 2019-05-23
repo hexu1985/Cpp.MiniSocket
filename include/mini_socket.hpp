@@ -195,8 +195,8 @@ private:
 
 /// IP版本号
 enum class NetworkLayerType {
-    IPv4 = AF_INET,     /**< IPv4版本 */
-    IPv6 = AF_INET6,    /**< IPv6版本 */
+    IPv4 = AF_INET,     /**< IPv4协议 */
+    IPv6 = AF_INET6,    /**< IPv6协议 */
 };
 
 /// 传输层协议类型
