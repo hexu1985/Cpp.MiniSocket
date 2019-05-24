@@ -429,22 +429,60 @@ public:
             SocketAddress &sourceAddress); 
 };
 
+/**
+ * @brief DNS解析类
+ */
 class DNSResolver {
 public:
+    /**
+     * @brief DNS解析结果迭代器
+     */
     struct Iterator {
         Iterator(std::shared_ptr<addrinfo> result); 
+
+        /**
+         * @brief 是否还有下一条结果
+         *
+         * @return 如果有下一条结果, 返回true; 否则返回false
+         */
         bool hasNext();
+
+        /**
+         * @brief 获取下一条结果
+         *
+         * @return 结果地址
+         */
         SocketAddressView next();
 
         addrinfo *res = 0;
         std::shared_ptr<addrinfo> ressave;
     };
 
+    /**
+     * @brief DNS解析请求, 可以指定host, service和传输层协议类型
+     *
+     * @param host 被解析的主机名
+     * @param serv 被解析的服务名
+     * @param trans_type 传输层协议类型: TCP or UDP
+     *
+     * @return 解析结果迭代器
+     */
     Iterator query(const char *host, const char *serv, TransportLayerType trans_type); 
-//    Iterator query(const char *host, const char *serv, NetworkLayerType net_type, TransportLayerType trans_type); 
+
+    /**
+     * @brief DNS解析请求, 可以指定host, service, 网络层协议类型和传输层协议类型
+     *
+     * @param host 被解析的主机名
+     * @param serv 被解析的服务名
+     * @param net_type 网络层协议类型: IPv4 or IPv6
+     * @param trans_type 传输层协议类型: TCP or UDP
+     *
+     * @return 解析结果迭代器
+     */
+    Iterator query(const char *host, const char *serv, NetworkLayerType net_type, TransportLayerType trans_type); 
 
 private:
-    std::shared_ptr<addrinfo> result_;
+    Iterator query(const char *host, const char *serv, addrinfo *hints); 
 };
 
 }   // MiniSocket

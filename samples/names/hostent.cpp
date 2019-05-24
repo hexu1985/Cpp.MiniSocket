@@ -1,3 +1,6 @@
+/** \example hostent.cpp
+ * This is an example of how to use the DNSResolver class to resolve domain name.
+ */
 #include <iostream>
 #include "mini_socket.hpp"
 
