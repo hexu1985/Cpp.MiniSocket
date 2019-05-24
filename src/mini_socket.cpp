@@ -74,7 +74,12 @@ string getLastSystemErrorStr()
     return err_msg;
 }
 
+string getGAIErrorStr(int n)
+{
+    return getLastSystemErrorStr();
 }
+
+}   // namespace MiniSocket
 
 #else   // not win32
 
@@ -83,6 +88,11 @@ namespace MiniSocket {
 string getLastSystemErrorStr()
 {
     return strerror(errno);
+}
+
+string getGAIErrorStr(int n)
+{
+    return gai_strerror(n);
 }
 
 }   // namespace MiniSocket
@@ -510,5 +520,56 @@ int UDPSocket::recvFrom(char *buffer, int bufferLen,
 
     return n;
 }
+
+// DNSResolver::Iterator 
+DNSResolver::Iterator::Iterator(std::shared_ptr<addrinfo> result):
+    res(result.get()), ressave(result)
+{
+}
+
+bool DNSResolver::Iterator::hasNext()
+{
+    return (res != NULL);
+}
+
+SocketAddressView DNSResolver::Iterator::next()
+{
+    SocketAddressView view(res->ai_addr, res->ai_addrlen); 
+    res = res->ai_next;
+    return view;
+}
+
+// DNSResolver 
+DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, 
+        TransportLayerType trans_type)
+{
+    addrinfo hints = {};
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = (int) trans_type;
+
+    addrinfo *res;
+    int n;
+    if ( (n = getaddrinfo(host, serv, &hints, &res)) != 0)
+        throw SocketException("Resolve DNS query failed (getaddrinfo())",
+                getGAIErrorStr(n));
+
+    auto deleter = [](addrinfo *ptr) {
+#ifndef NDEBUG
+                        cout << "freeaddrinfo called" << endl;
+#endif
+                        freeaddrinfo(ptr);
+                    };
+
+    result_ = std::shared_ptr<addrinfo>(res, deleter);
+
+    return Iterator(result_);
+}
+
+#if 0
+DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, 
+        NetworkLayerType net_type, TransportLayerType trans_type)
+{
+}
+#endif
 
 }   // namesapce MiniSocket

@@ -429,6 +429,24 @@ public:
             SocketAddress &sourceAddress); 
 };
 
+class DNSResolver {
+public:
+    struct Iterator {
+        Iterator(std::shared_ptr<addrinfo> result); 
+        bool hasNext();
+        SocketAddressView next();
+
+        addrinfo *res = 0;
+        std::shared_ptr<addrinfo> ressave;
+    };
+
+    Iterator query(const char *host, const char *serv, TransportLayerType trans_type); 
+//    Iterator query(const char *host, const char *serv, NetworkLayerType net_type, TransportLayerType trans_type); 
+
+private:
+    std::shared_ptr<addrinfo> result_;
+};
+
 }   // MiniSocket
 
 #endif
