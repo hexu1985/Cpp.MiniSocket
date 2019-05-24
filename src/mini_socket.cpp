@@ -138,7 +138,7 @@ string toString(const sockaddr *sa, socklen_t salen)
     string address;
     uint16_t port;
     std::tie(address, port) = getAddressPort(sa, salen);
-    if (port == 0)
+    if (address.empty())
         return null_result;
 
     ostringstream os;
