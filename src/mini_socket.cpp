@@ -151,6 +151,23 @@ string toString(const sockaddr *sa, socklen_t salen)
     return os.str();
 }
 
+MiniSocket::NetworkLayerType getNetworkLayerType(const sockaddr *sa, socklen_t salen)
+{
+    MiniSocket::NetworkLayerType type = MiniSocket::NetworkLayerType::UNKNOWN; 
+	switch (sa->sa_family) {
+	case AF_INET:
+        type = MiniSocket::NetworkLayerType::IPv4;
+        break;
+	case AF_INET6:
+        type = MiniSocket::NetworkLayerType::IPv6;
+        break;
+	default:
+        break;
+	}
+
+    return type;
+}
+
 }   // namespace
 
 namespace MiniSocket {
@@ -191,9 +208,9 @@ socklen_t SocketAddressView::getSockaddrLen() const
     return addrLen_;
 }
 
-SocketAddress::SocketAddress(): addrLen_(sizeof(sockaddr_storage))
+NetworkLayerType SocketAddressView::getNetworkLayerType() const
 {
-    memset(&addr_, 0, sizeof(addr_));
+    return ::getNetworkLayerType(getSockaddr(), getSockaddrLen());
 }
 
 // SocketAddress
@@ -254,6 +271,11 @@ socklen_t SocketAddress::getSockaddrLen() const
     return addrLen_;
 }
 
+NetworkLayerType SocketAddress::getNetworkLayerType() const
+{
+    return ::getNetworkLayerType(getSockaddr(), getSockaddrLen());
+}
+
 // Socket
 Socket::~Socket()
 {
@@ -264,6 +286,11 @@ Socket::~Socket()
 void Socket::open(NetworkLayerType version, TransportLayerType type)
 {
     createSocket(static_cast<int>(version), static_cast<int>(type), 0);   
+}
+
+bool Socket::open(NetworkLayerType version, TransportLayerType type, const std::nothrow_t &nothrow_value)
+{
+    return createSocket(static_cast<int>(version), static_cast<int>(type), 0, nothrow_value);
 }
 
 void Socket::close()
@@ -307,6 +334,15 @@ void Socket::createSocket(int domain, int type, int protocol)
     }
 }
 
+bool Socket::createSocket(int domain, int type, int protocol, const std::nothrow_t &nothrow_value)
+{
+    if (isOpened())
+        close();
+
+    sockDesc_ = socket(domain, type, protocol);
+    return isOpened();
+}
+
 void Socket::bind(const SocketAddress &localAddress)
 {
     if (::bind(sockDesc_, localAddress.getSockaddr(), localAddress.getSockaddrLen()) != 0) {
@@ -324,7 +360,21 @@ void CommunicatingSocket::connect(const SocketAddress &foreignAddress)
     }
 }
 
+void CommunicatingSocket::connect(const SocketAddressView &foreignAddress)
+{
+    if (::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen()) != 0) {
+        throw SocketException("connect error", 
+                getLastSystemErrorStr());
+    }
+}
+
 bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value)
+{
+    int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
+    return (ret == 0);
+}
+
+bool CommunicatingSocket::connect(const SocketAddressView &foreignAddress, const std::nothrow_t &nothrow_value)
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
     return (ret == 0);

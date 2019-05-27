@@ -54,6 +54,20 @@ typedef int SOCKET;
 
 namespace MiniSocket {
 
+/// IP版本号
+enum class NetworkLayerType {
+    UNKNOWN = UINT16_MAX,   /**< 未知协议 */
+    IPv4 = AF_INET,         /**< IPv4协议 */
+    IPv6 = AF_INET6,        /**< IPv6协议 */
+};
+
+/// 传输层协议类型
+enum class TransportLayerType {
+    UNKNOWN = UINT16_MAX,   /**< 未知协议 */
+    TCP = SOCK_STREAM,      /**< TCP协议 */
+    UDP = SOCK_DGRAM,       /**< UDP协议 */
+};
+
 /**
  * @brief MiniSocket库的异常类, 表征任何Socket相关接口的异常
  */
@@ -117,6 +131,13 @@ public:
      */
     socklen_t getSockaddrLen() const; 
 
+    /**
+     * @brief 获取sockaddr类型(网络层协议)
+     *
+     * @return NetworkLayerType枚举 
+     */
+    NetworkLayerType getNetworkLayerType() const;
+
 private:
     const sockaddr *addr_ = 0;
     socklen_t addrLen_ = 0;
@@ -130,7 +151,7 @@ public:
     /**
      * @brief 构造一个空的SocketAddress
      */
-    SocketAddress(); 
+    SocketAddress() = default; 
 
     /**
      * @brief 根据指定ip+port构造一个SocketAddress
@@ -188,21 +209,16 @@ public:
      */
     socklen_t getSockaddrLen() const; 
 
+    /**
+     * @brief 获取sockaddr类型(网络层协议)
+     *
+     * @return NetworkLayerType枚举 
+     */
+    NetworkLayerType getNetworkLayerType() const;
+
 private:
     sockaddr_storage addr_ = {};
-    socklen_t addrLen_ = sizeof (sockaddr_storage);
-};
-
-/// IP版本号
-enum class NetworkLayerType {
-    IPv4 = AF_INET,     /**< IPv4协议 */
-    IPv6 = AF_INET6,    /**< IPv6协议 */
-};
-
-/// 传输层协议类型
-enum class TransportLayerType {
-    TCP = SOCK_STREAM,  /**< TCP协议 */
-    UDP = SOCK_DGRAM,   /**< UDP协议 */
+    socklen_t addrLen_ = sizeof(addr_);
 };
 
 /**
@@ -222,6 +238,17 @@ public:
      * @param type 传输层协议版本
      */
     void open(NetworkLayerType version, TransportLayerType type);
+
+    /**
+     * @brief 打开socket, 并禁止异常抛出
+     *
+     * @param version 网络层协议版本
+     * @param type 传输层协议版本
+     * @param nothrow_value 传入std::nothrow
+     *
+     * @return 如果成功返回true; 否则返回false.
+     */
+    bool open(NetworkLayerType version, TransportLayerType type, const std::nothrow_t &nothrow_value);
 
     /**
      * @brief 关闭socket
@@ -258,6 +285,7 @@ protected:
 
     Socket() = default;
     void createSocket(int domain, int type, int protocol);
+    bool createSocket(int domain, int type, int protocol, const std::nothrow_t &nothrow_value);
 };
 
 /**
@@ -275,6 +303,7 @@ public:
      * @note 连接失败会抛出SocketException异常
      */
     void connect(const SocketAddress &foreignAddress);
+    void connect(const SocketAddressView &foreignAddress);
 
     /**
      * @brief 连接到远端地址
@@ -285,6 +314,7 @@ public:
      * @return 如果连接成功, 返回true; 否则返回false
      */
     bool connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value);
+    bool connect(const SocketAddressView &foreignAddress, const std::nothrow_t &nothrow_value);
 
     /**
      * @brief 发送数据

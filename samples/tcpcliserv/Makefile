@@ -14,7 +14,7 @@ ifeq ($(OS), Windows_NT)
 	LDFLAGS = -lwsock32 -lws2_32 #-lpthread 
 endif
 
-PROGS =	tcpcli tcpserv 
+PROGS =	tcpcli tcpserv tcpcli_byname
 
 all: $(PROGS)
 	@echo "PROGS = $(PROGS)" 
@@ -30,5 +30,8 @@ tcpcli:	tcpcli.o str_cli.o mini_socket.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
 
 tcpserv:	tcpserv.o str_echo.o mini_socket.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
+
+tcpcli_byname:	tcpcli_byname.o str_cli.o mini_socket.o tcp_connect.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
 
