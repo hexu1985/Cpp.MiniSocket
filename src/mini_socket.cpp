@@ -571,6 +571,31 @@ int UDPSocket::recvFrom(char *buffer, int bufferLen,
     return n;
 }
 
+// UDPClientSocket
+UDPClientSocket::UDPClientSocket(const SocketAddress &foreignAddress)
+{
+    int domain = foreignAddress.getSockaddr()->sa_family;
+    createSocket(domain, SOCK_STREAM, 0);
+    connect(foreignAddress);
+}
+
+void UDPClientSocket::disconnect()
+{
+    sockaddr_in nullAddr;
+    memset(&nullAddr, 0, sizeof(nullAddr));
+    nullAddr.sin_family = AF_UNSPEC;
+
+    if (::connect(sockDesc_, (sockaddr *) &nullAddr, sizeof (nullAddr)) != 0) {
+#ifdef WIN32
+        if (WSAGetLastError() != WSAEAFNOSUPPORT)
+#else
+        if (errno != EAFNOSUPPORT)
+#endif
+            throw SocketException("Disconnect failed (connect())",
+                getLastSystemErrorStr());
+    }
+}
+
 // DNSResolver::Iterator 
 DNSResolver::Iterator::Iterator(std::shared_ptr<addrinfo> result):
     res(result.get()), ressave(result)

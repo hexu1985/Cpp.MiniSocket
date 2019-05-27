@@ -14,7 +14,7 @@ ifeq ($(OS), Windows_NT)
 	LDFLAGS = -lwsock32 -lws2_32 #-lpthread 
 endif
 
-PROGS =	udpcli udpserv 
+PROGS =	udpcli udpserv udpcli_byname 
 
 all: $(PROGS)
 	@echo "PROGS = $(PROGS)" 
@@ -30,5 +30,8 @@ udpcli:	udpcli.o dg_cli.o mini_socket.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
 
 udpserv:	udpserv.o dg_echo.o mini_socket.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
+
+udpcli_byname:	udpcli_byname.o dg_cli_connected.o mini_socket.o udp_connect.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDPATH) $(LDFLAGS)
 
