@@ -17,7 +17,7 @@ endif
 
 SOURCES = $(shell ls *.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
-STATICLIB = libpnl.a
+STATICLIB = libmini_socket.a
 
 all: $(STATICLIB)
 	@echo "STATICLIB = $(STATICLIB)" 
