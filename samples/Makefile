@@ -1,27 +1,14 @@
 
-OS ?= $(shell uname -s)
+SUBDIRS = daytimetcp daytimeudp names tcpcliserv udpcliserv
 
-RM = rm -f
-CXX = g++
-CXXFLAGS = -Wall -g -std=c++11 -DNDEBUG
-INCLUDES = -I../include
-LDFLAGS = -lpthread
-LDPATH =
-
-ifeq ($(OS), Windows_NT)
-	CXXFLAGS += -D_WIN32_WINNT=0x0600 # _WIN32_WINNT for inet_ntop
-	LDFLAGS = -lwsock32 -lws2_32 #-lpthread 
-endif
-
-SOURCES = $(shell ls *.cpp)
-PROGS = $(SOURCES:%.cpp=%)
-
-all: $(PROGS)
-	@echo "PROGS = $(PROGS)" 
+all:
+	@$(MAKE) $(MFLAGS) WHAT_TO_MAKE=$@ common
 
 clean:
-	@echo "OS: $(OS)"
-	$(RM) $(PROGS)
+	@$(MAKE) $(MFLAGS) WHAT_TO_MAKE=$@ common
 
-%: %.cpp
-	$(CXX) -o $@ ../src/mini_socket.cpp $(CXXFLAGS) $(INCLUDES) $^ $(LDFLAGS) $(LDPATH) 
+common:
+	@for dir in $(SUBDIRS); do \
+		echo "Making $(WHAT_TO_MAKE) in $$dir..."; \
+		(cd $$dir && $(MAKE) $(MFLAGS) $(WHAT_TO_MAKE)) || exit 1; \
+	done
