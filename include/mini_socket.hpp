@@ -8,8 +8,8 @@
  * @see TCP/IP Sockets in C Second Edition, Chapter 8, PracticalSocket lib \n
  * https://github.com/hexu1985/TCP.IP.Sockets.in.C
  */
-#ifndef PNL_MINI_SOCKET_INC
-#define PNL_MINI_SOCKET_INC
+#ifndef MINI_SOCKET_INC
+#define MINI_SOCKET_INC
 
 #if defined WIN32 or defined _WIN32
 #include <winsock2.h>

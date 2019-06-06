@@ -8,8 +8,8 @@
  * @see UNIX Network Programming Volume 1: The Sockets Networking API, Third Edition \n
  * https://github.com/hexu1985/UNIX.Network.Programming
  */
-#ifndef PNL_MINI_SOCKET_TCP_CONNECT_INC
-#define PNL_MINI_SOCKET_TCP_CONNECT_INC
+#ifndef MINI_SOCKET_TCP_CONNECT_INC
+#define MINI_SOCKET_TCP_CONNECT_INC
 
 #include <memory>
 #include "mini_socket.hpp"
