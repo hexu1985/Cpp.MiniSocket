@@ -4,6 +4,9 @@
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-05-22
+ *
+ * @see TCP/IP Sockets in C Second Edition, Chapter 8, PracticalSocket lib \n
+ * https://github.com/hexu1985/TCP.IP.Sockets.in.C
  */
 #ifndef PNL_MINI_SOCKET_INC
 #define PNL_MINI_SOCKET_INC
