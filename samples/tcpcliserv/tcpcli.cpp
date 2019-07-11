@@ -1,4 +1,4 @@
-/** \example tcpcli.cpp
+/** \example tcpcliserv/tcpcli.cpp
  * This is an example of how to use the TCPSocket class to implement tcp echo client.
  */
 #include <iostream>

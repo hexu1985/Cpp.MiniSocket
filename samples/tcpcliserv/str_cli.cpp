@@ -1,4 +1,4 @@
-/** \example str_cli.cpp
+/** \example tcpcliserv/str_cli.cpp
  * The implement of str_cli function in tcp echo client.
  */
 #include "str_cli.hpp"

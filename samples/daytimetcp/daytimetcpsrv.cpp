@@ -1,4 +1,4 @@
-/** \example daytimetcpsrv.cpp
+/** \example daytimetcp/daytimetcpsrv.cpp
  * This is an example of how to use the TCPServerSocket class to implement daytimetcp server.
  */
 #include <string>

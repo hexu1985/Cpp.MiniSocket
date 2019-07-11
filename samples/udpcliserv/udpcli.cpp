@@ -1,4 +1,4 @@
-/** \example udpcli.cpp
+/** \example udpcliserv/udpcli.cpp
  * This is an example of how to use the UDPSocket class to implement udp echo client.
  */
 #include <iostream>

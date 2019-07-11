@@ -1,4 +1,4 @@
-/** \example tcpcli_byname.cpp
+/** \example tcpcliserv/tcpcli_byname.cpp
  * This is an example of how to use the tcp_connect to implement tcp echo client.
  */
 #include <iostream>

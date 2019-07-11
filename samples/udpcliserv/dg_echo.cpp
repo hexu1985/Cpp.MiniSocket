@@ -1,4 +1,4 @@
-/** \example dg_echo.cpp
+/** \example udpcliserv/dg_echo.cpp
  * The implement of dg_echo function in udp echo server.
  */
 #include "dg_echo.hpp"

@@ -1,4 +1,4 @@
-/** \example hostent.cpp
+/** \example names/hostent.cpp
  * This is an example of how to use the DNSResolver class to resolve domain name.
  */
 #include <iostream>

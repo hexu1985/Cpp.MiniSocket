@@ -1,4 +1,4 @@
-/** \example dg_cli_connected.cpp
+/** \example udpcliserv/dg_cli_connected.cpp
  * The implement of dg_cli function in udp echo client (using UDPClientSocket).
  */
 #include "dg_cli_connected.hpp"

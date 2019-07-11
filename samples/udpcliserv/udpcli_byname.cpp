@@ -1,4 +1,4 @@
-/** \example udpcli_byname.cpp
+/** \example udpcliserv/udpcli_byname.cpp
  * This is an example of how to use the udp_connect to implement udp echo client.
  */
 #include <iostream>

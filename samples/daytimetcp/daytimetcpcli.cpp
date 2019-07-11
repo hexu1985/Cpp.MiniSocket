@@ -1,4 +1,4 @@
-/** \example daytimetcpcli.cpp
+/** \example daytimetcp/daytimetcpcli.cpp
  * This is an example of how to use the TCPSocket class to implement daytimetcp client.
  */
 #include <iostream>
