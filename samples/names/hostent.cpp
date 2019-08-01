@@ -9,11 +9,10 @@ using namespace MiniSocket;
 
 int main(int argc, char *argv[])
 {
-    DNSResolver resolver;
-    SocketAddressView addr;
     for (int i = 1; i < argc; i++) {
         cout << "resolve dns of " << argv[i] << endl;
         try {
+            DNSResolver resolver;
             for (auto addr: resolver.query(argv[i], NULL, TransportLayerType::TCP)) {
                 cout << "\taddress: " << get<0>(addr.getAddressPort()) << endl;
             }
