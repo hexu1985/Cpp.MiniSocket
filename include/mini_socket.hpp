@@ -493,24 +493,50 @@ public:
      * @brief DNS解析结果迭代器
      */
     struct Iterator {
-        Iterator(std::shared_ptr<addrinfo> result); 
-
-        /**
-         * @brief 是否还有下一条结果
-         *
-         * @return 如果有下一条结果, 返回true; 否则返回false
-         */
-        bool hasNext();
-
-        /**
-         * @brief 获取下一条结果
-         *
-         * @return 结果地址
-         */
-        SocketAddressView next();
-
         addrinfo *res = 0;
         std::shared_ptr<addrinfo> ressave;
+
+        Iterator(): res(nullptr)
+        {
+        }
+
+        Iterator(std::shared_ptr<addrinfo> result):
+            res(result.get()), ressave(result)
+        {
+        }
+
+        void next()
+        {
+            res = res->ai_next;
+        }
+
+        SocketAddressView operator *() const
+        {
+            return SocketAddressView(res->ai_addr, res->ai_addrlen);
+        }
+
+        Iterator &operator ++()
+        {
+            next();
+            return *this;
+        }
+
+        Iterator operator ++(int)
+        {
+            Iterator tmp(*this);
+            next();
+            return tmp;
+        }
+
+        bool operator ==(const Iterator &rhs) const
+        {
+            return this->res == rhs.res;
+        }
+
+        bool operator !=(const Iterator &rhs) const
+        {
+            return !(*this == rhs);
+        }
     };
 
     /**
@@ -539,6 +565,40 @@ public:
 private:
     Iterator query(const char *host, const char *serv, addrinfo *hints); 
 };
+
+/**
+ * @brief 获取开始迭代器
+ *
+ * @param iter DNS解析结果迭代器
+ *
+ * @return DNS解析结果迭代器的起始
+ *
+ * @note 为了支持如下使用方式:
+ * for (auto addr: resolver.query(host, serv, TransportLayerType::TCP)) {
+ *      // process addr
+ * }
+ */
+inline DNSResolver::Iterator begin(const DNSResolver::Iterator &iter)
+{
+    return DNSResolver::Iterator(iter.ressave);
+}
+
+/**
+ * @brief 获取结束迭代器
+ *
+ * @param iter DNS解析结果迭代器
+ *
+ * @return DNS解析结果迭代器的结束
+ *
+ * @note 为了支持如下使用方式:
+ * for (auto addr: resolver.query(host, serv, TransportLayerType::TCP)) {
+ *      // process addr
+ * }
+ */
+inline DNSResolver::Iterator end(const DNSResolver::Iterator &iter)
+{
+    return DNSResolver::Iterator();
+}
 
 }   // MiniSocket
 

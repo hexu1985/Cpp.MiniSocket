@@ -14,9 +14,7 @@ int main(int argc, char *argv[])
     for (int i = 1; i < argc; i++) {
         cout << "resolve dns of " << argv[i] << endl;
         try {
-            auto iter = resolver.query(argv[i], NULL, TransportLayerType::TCP);
-            while (iter.hasNext()) {
-                addr = iter.next();
+            for (auto addr: resolver.query(argv[i], NULL, TransportLayerType::TCP)) {
                 cout << "\taddress: " << get<0>(addr.getAddressPort()) << endl;
             }
         } catch(const SocketException &e) {

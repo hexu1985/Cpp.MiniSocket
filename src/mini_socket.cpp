@@ -596,24 +596,6 @@ void UDPClientSocket::disconnect()
     }
 }
 
-// DNSResolver::Iterator 
-DNSResolver::Iterator::Iterator(std::shared_ptr<addrinfo> result):
-    res(result.get()), ressave(result)
-{
-}
-
-bool DNSResolver::Iterator::hasNext()
-{
-    return (res != NULL);
-}
-
-SocketAddressView DNSResolver::Iterator::next()
-{
-    SocketAddressView view(res->ai_addr, res->ai_addrlen); 
-    res = res->ai_next;
-    return view;
-}
-
 // DNSResolver 
 DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, addrinfo *hints)
 {
