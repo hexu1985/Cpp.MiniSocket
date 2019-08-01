@@ -172,17 +172,6 @@ MiniSocket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_
 
 namespace MiniSocket {
 
-// SocketException
-SocketException::SocketException(const string &message) :
-    runtime_error(message) 
-{
-}
-
-SocketException::SocketException(const string &message, const string &detail) :
-    runtime_error(message + ": " + detail) 
-{
-}
-
 // SocketAddressView
 SocketAddressView::SocketAddressView(const sockaddr *addrVal, socklen_t addrLenVal) : addr_(addrVal), addrLen_(addrLenVal)
 {

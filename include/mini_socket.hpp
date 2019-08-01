@@ -26,9 +26,10 @@
 #include <cstdint>
 #include <string>
 #include <tuple>
-#include <stdexcept>
 #include <memory>
 #include <iostream>
+
+#include "SocketException.hpp"
 
 #if defined WIN32 or defined _WIN32
 namespace MiniSocket {
@@ -69,27 +70,6 @@ enum class TransportLayerType {
     UNKNOWN = UINT16_MAX,   /**< 未知协议 */
     TCP = SOCK_STREAM,      /**< TCP协议 */
     UDP = SOCK_DGRAM,       /**< UDP协议 */
-};
-
-/**
- * @brief MiniSocket库的异常类, 表征任何Socket相关接口的异常
- */
-class SocketException : public std::runtime_error {
-public:
-    /**
-     * @brief 构造一个SocketException对象
-     *
-     * @param message 异常基本信息
-     */
-  SocketException(const std::string &message); 
-  
-  /**
-   * @brief 构造一个SocketException对象
-   *
-   * @param message 异常基本信息
-   * @param detail 异常详细信息
-   */
-  SocketException(const std::string &message, const std::string &detail);
 };
 
 /**

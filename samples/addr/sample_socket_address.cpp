@@ -1,4 +1,4 @@
-/** \example sample_socket_address.cpp
+/** \example addr/sample_socket_address.cpp
  * This is an example of how to use the SocketAddress class.
  */
 #include <iostream>
