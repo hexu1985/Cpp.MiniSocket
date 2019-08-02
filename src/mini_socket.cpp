@@ -22,7 +22,7 @@ public:
     _WSAStartupHolder_()
     {
         if (WSAStartup(WSVERS, &wsadata) != 0)
-            throw SocketException("WSAStartup error");
+            throw_socket_exception("WSAStartup error");
 #ifndef NDEBUG
         cout << "WSAStartup ok" << endl;
 #endif
@@ -209,8 +209,8 @@ SocketAddress::SocketAddress(const char *address, uint16_t port): SocketAddress(
         return;
 
     ostringstream os;
-    os << "the address is [" << address << "], and port is [" << port << "]";
-    throw SocketException("Construct SocketAddress error", os.str());
+    os << "Construct SocketAddress error: the address is [" << address << "], and port is [" << port << "]";
+    throw_socket_exception(os.str());
 }
 
 SocketAddress::SocketAddress(sockaddr *addrVal, socklen_t addrLenVal):
@@ -304,8 +304,7 @@ SocketAddress Socket::getLocalAddress() const
     socklen_t addrLen = sizeof(addr);
 
     if (getsockname(sockDesc_, (sockaddr *) &addr, &addrLen) != 0) {
-        throw SocketException("Fetch of local address failed (getsockname())",
-                get_last_system_error_str());
+        throw_socket_exception("Fetch of local address failed (getsockname())");
     }
 
     return SocketAddress((sockaddr *)&addr, addrLen);
@@ -318,8 +317,7 @@ void Socket::createSocket(int domain, int type, int protocol)
 
     sockDesc_ = socket(domain, type, protocol);
     if (!isOpened()) {
-        throw SocketException("Can't create socket", 
-                get_last_system_error_str());
+        throw_socket_exception("Can't create socket");
     }
 }
 
@@ -335,8 +333,7 @@ bool Socket::createSocket(int domain, int type, int protocol, const std::nothrow
 void Socket::bind(const SocketAddress &localAddress)
 {
     if (::bind(sockDesc_, localAddress.getSockaddr(), localAddress.getSockaddrLen()) != 0) {
-        throw SocketException("bind error", 
-                get_last_system_error_str());
+        throw_socket_exception("bind error");
     }
 }
 
@@ -344,16 +341,14 @@ void Socket::bind(const SocketAddress &localAddress)
 void CommunicatingSocket::connect(const SocketAddress &foreignAddress)
 {
     if (::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen()) != 0) {
-        throw SocketException("connect error", 
-                get_last_system_error_str());
+        throw_socket_exception("connect error");
     }
 }
 
 void CommunicatingSocket::connect(const SocketAddressView &foreignAddress)
 {
     if (::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen()) != 0) {
-        throw SocketException("connect error", 
-                get_last_system_error_str());
+        throw_socket_exception("connect error");
     }
 }
 
@@ -373,8 +368,7 @@ int CommunicatingSocket::send(const char *buffer, int bufferLen)
 {
     int n = ::send(sockDesc_, buffer, bufferLen, 0);
     if ( n < 0 ) {
-        throw SocketException("Send failed (send())",
-                get_last_system_error_str());
+        throw_socket_exception("Send failed (send())");
     }
 
     return n;
@@ -384,8 +378,7 @@ int CommunicatingSocket::recv(char *buffer, int bufferLen)
 {
     int n = ::recv(sockDesc_, buffer, bufferLen, 0); 
     if ( n < 0 ) {
-        throw SocketException("Receive failed (recv())",
-                get_last_system_error_str());
+        throw_socket_exception("Receive failed (recv())");
     }
 
     return n;
@@ -397,8 +390,7 @@ SocketAddress CommunicatingSocket::getForeignAddress() const
     socklen_t addrLen = sizeof(addr);
 
     if (getpeername(sockDesc_, (sockaddr *) &addr, &addrLen) != 0) {
-        throw SocketException("Fetch of foreign address failed (getpeername())",
-                get_last_system_error_str());
+        throw_socket_exception("Fetch of foreign address failed (getpeername())");
     }
 
     return SocketAddress((sockaddr *)&addr, addrLen);
@@ -502,8 +494,7 @@ TCPServerSocket::TCPServerSocket(const SocketAddress &localAddress)
 void TCPServerSocket::listen(int backlog)
 {
     if (::listen(sockDesc_, backlog) != 0) {
-        throw SocketException("listen error", 
-                get_last_system_error_str());
+        throw_socket_exception("listen error");
     }
 }
 
@@ -511,8 +502,7 @@ shared_ptr<TCPSocket> TCPServerSocket::accept()
 {
     SOCKET newConnSD;
     if ((newConnSD = ::accept(sockDesc_, NULL, 0)) == INVALID_SOCKET) {
-        throw SocketException("Accept failed (accept())",
-                get_last_system_error_str());
+        throw_socket_exception("Accept failed (accept())");
     }
 
     return shared_ptr<TCPSocket>(new TCPSocket(newConnSD));
@@ -537,8 +527,7 @@ int UDPSocket::sendTo(const char *buffer, int bufferLen,
     int n = ::sendto(sockDesc_, buffer, bufferLen, 0,
             foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
     if ( n < 0 ) {
-        throw SocketException("Send failed (sendto())",
-                get_last_system_error_str());
+        throw_socket_exception("Send failed (sendto())");
     }
 
     return n;
@@ -552,8 +541,7 @@ int UDPSocket::recvFrom(char *buffer, int bufferLen,
     int n = recvfrom(sockDesc_, buffer, bufferLen, 0,
             (sockaddr *) &cliAddr, (socklen_t *) &addrLen);
     if (n < 0) {
-        throw SocketException("Receive failed (recvfrom())",
-                get_last_system_error_str());
+        throw_socket_exception("Receive failed (recvfrom())");
     }
     sourceAddress = SocketAddress((sockaddr *)&cliAddr, addrLen);
 
@@ -580,8 +568,7 @@ void UDPClientSocket::disconnect()
 #else
         if (errno != EAFNOSUPPORT)
 #endif
-            throw SocketException("Disconnect failed (connect())",
-                get_last_system_error_str());
+            throw_socket_exception("Disconnect failed (connect())");
     }
 }
 
@@ -590,9 +577,9 @@ DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, add
 {
     addrinfo *res;
     int n;
-    if ( (n = getaddrinfo(host, serv, hints, &res)) != 0)
-        throw SocketException("Resolve DNS query failed (getaddrinfo())",
-                get_gai_error_str(n));
+    if ( (n = getaddrinfo(host, serv, hints, &res)) != 0) {
+        throw_gai_exception(n);
+    }
 
     auto deleter = [](addrinfo *ptr) {
 #ifndef NDEBUG
