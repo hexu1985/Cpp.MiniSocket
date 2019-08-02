@@ -16,7 +16,7 @@ std::shared_ptr<UDPClientSocket> udp_connect(const char *host, const char *serv)
         return sock;
     }
 
-    throw SocketException("udp connect error");
+    sys_error("udp connect error");
 }
 
 }   // namespace MiniSocket

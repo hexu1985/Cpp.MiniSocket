@@ -5,28 +5,41 @@
 
 namespace MiniSocket {
 
-enum class ErrorCodeType {
-    UNKNOWN = UINT16_MAX,   /**< 未知错误 */
-    ERRNO = 1,              /**< E* */
-    GAI_ERRNO = 2,          /**< EAI_* */
+enum class ErrorType: uint32_t {
+    UNKNOWN = 0,        /**< 未知类型 */
+    SYS = 1,            /**< 系统层: use errno */
+    GAI = 2,            /**< getaddrinfo接口返回的错误码: EAI_* */
+    USR = UINT16_MAX,   /**< 用户侧错误 */
 };
 
 struct ErrorCode {
-    int type = (int) ErrorCodeType::UNKNOWN;
+    int type = (int) ErrorType::UNKNOWN;
     int value = 0;
 
     ErrorCode(int type_, int value_): type(type_), value(value_) {}
 };
 
+inline
+ErrorCode make_sys_error(int error)
+{
+    return ErrorCode((int) ErrorType::SYS, error);
+}
+
+inline
+ErrorCode make_gai_error(int error)
+{
+    return ErrorCode((int) ErrorType::GAI, error);
+}
+
 /**
  * @brief MiniSocket库的异常类, 表征任何Socket相关接口的异常
  */
-class Exception : public std::exception {
+class SocketException : public std::exception {
 public:
-    Exception(const std::string &message, const ErrorCode &error): 
+    SocketException(const std::string &message, const ErrorCode &error): 
         message_(message), error_(error) {}
 
-    ~Exception();
+    ~SocketException();
 
     const ErrorCode &getErrorCode() const { return error_; }
 
@@ -37,20 +50,23 @@ protected:
     ErrorCode error_;
 };
 
-class SocketException: public Exception {
+class SYSException: public SocketException {
 public:
-    SocketException(const std::string &message, int error = 0);
-    ~SocketException();
+    SYSException(const std::string &message, int error = 0);
+    ~SYSException();
 };
 
-class GAIException: public Exception {
+class GAIException: public SocketException {
 public:
+    GAIException(const std::string &message, int error);
     GAIException(int error);
     ~GAIException();
 };
 
-void throw_socket_exception(const std::string &message);
-void throw_gai_exception(int error);
+[[ noreturn ]] void sys_error(const std::string &message, int error);
+[[ noreturn ]] void sys_error(const std::string &message);
+[[ noreturn ]] void gai_error(const std::string &message, int error);
+[[ noreturn ]] void gai_error(int error);
 
 }   // MiniSocket
 

@@ -10,38 +10,26 @@ using namespace std;
 
 namespace MiniSocket {
 
-Exception::~Exception()
+SocketException::SocketException(const string &message, const ErrorCode &error): 
+    runtime_error(message), error_(error) 
 {
 }
 
-const char *Exception::what() const noexcept
+SocketException::~SocketException()
 {
-    return message_.c_str();
 }
 
 namespace {
 
-inline
-ErrorCode make_errno_error(int error)
-{
-    return ErrorCode((int) ErrorCodeType::ERRNO, error);
-}
-
-inline
-ErrorCode make_gai_error(int error)
-{
-    return ErrorCode((int) ErrorCodeType::GAI_ERRNO, error);
-}
-
 #if defined WIN32 or defined _WIN32
-string get_errno_error_str(int error)
+string get_sys_error_str(int error)
 {
     HLOCAL hlocal = NULL;
     FormatMessage(
         FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL,
         error, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
         (LPTSTR) &hlocal, 0, NULL);
-    std::string err_msg((const char *)hlocal);
+    string err_msg((const char *)hlocal);
     LocalFree(hlocal);
 
     return err_msg;
@@ -50,17 +38,13 @@ string get_errno_error_str(int error)
 inline
 string get_gai_error_str(int error)
 {
-    return get_errno_error_str(error);
+    return get_sys_error_str(error);
 }
 
 #else   // not win32
-string get_errno_error_str(int error)
+string get_sys_error_str(int error)
 {
-    const int BUF_LEN = 256;
-    char buf[BUF_LEN] = {0};
-    strerror_r(error, buf, BUF_LEN);
-    buf[BUF_LEN-1] = 0;
-    return string(buf);
+    return strerror(error);
 }
 
 inline
@@ -71,49 +55,68 @@ string get_gai_error_str(int error)
 
 #endif
 
+string get_sys_error_str(const string &title, int error)
+{
+    string message(title);
+    if (error != 0) {
+        if (!title.empty())
+            message += ": ";
+        message += get_sys_error_str(error);
+    }
+    return message;
+}
+
+string get_gai_error_str(const string &title, int error)
+{
+    string message(title);
+    if (error != 0) {
+        if (!title.empty())
+            message += ": ";
+        message += get_gai_error_str(error);
+    }
+    return message;
+}
+
 }   // namespace {
 
-SocketException::SocketException(const string &message, int error):
-    Exception(message, make_errno_error(error))
-{
-    if (error != 0) {
-        message_ += ": ";
-        message_ += get_errno_error_str(error);
-    }
-}
-
-SocketException::~SocketException()
+SYSException::SYSException(const string &message, int error):
+    SocketException(get_sys_error_str(message, error), make_sys_error(error))
 {
 }
 
-GAIException::GAIException(int error):
-    Exception("getaddrinfo error", make_gai_error(error))
+SYSException::~SYSException()
 {
-    if (error != 0) {
-        message_ += ": ";
-        message_ += get_gai_error_str(error);
-    }
+}
+
+GAIException::GAIException(const string &message, int error):
+    SocketException(get_sys_error_str(message, error), make_gai_error(error))
+{
 }
 
 GAIException::~GAIException()
 {
 }
 
-void throw_socket_exception(const std::string &message)
+void sys_error(const string &message, int error)
+{
+    throw SYSException(message, error);
+}
+
+void sys_error(const string &message)
 {
 #if defined WIN32 or defined _WIN32
-    throw SocketException(message, WSAGetLastError());
+    throw SYSException(message, WSAGetLastError());
 #else
-    throw SocketException(message, errno);
+    throw SYSException(message, errno);
 #endif
 }
 
-void throw_gai_exception(int error)
+void gai_error(const string &message, int error)
 {
 #if defined WIN32 or defined _WIN32
-    throw GAIException(WSAGetLastError());
+    throw GAIException(message, WSAGetLastError());
 #else
-    throw GAIException(error);
+    throw GAIException(message, error);
 #endif
 }
 

@@ -16,7 +16,7 @@ std::shared_ptr<TCPSocket> tcp_connect(const char *host, const char *serv)
         return sock;
     }
 
-    throw SocketException("tcp connect error");
+    sys_error("tcp connect error");
 }
 
 }   // namespace MiniSocket
