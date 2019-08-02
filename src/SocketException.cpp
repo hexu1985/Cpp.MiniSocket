@@ -89,7 +89,7 @@ SYSException::~SYSException()
 }
 
 GAIException::GAIException(const string &message, int error):
-    SocketException(get_sys_error_str(message, error), make_gai_error(error))
+    SocketException(get_gai_error_str(message, error), make_gai_error(error))
 {
 }
 

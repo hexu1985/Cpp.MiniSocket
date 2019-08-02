@@ -1,3 +1,10 @@
+/**
+ * @file SocketException.hpp
+ * @brief socket相关异常类的定义
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-08-02
+ */
 #ifndef MINI_SOCKET_SOCKET_EXCEPTION_INC
 #define MINI_SOCKET_SOCKET_EXCEPTION_INC
 
@@ -34,19 +41,14 @@ ErrorCode make_gai_error(int error)
 /**
  * @brief MiniSocket库的异常类, 表征任何Socket相关接口的异常
  */
-class SocketException : public std::exception {
+class SocketException : public std::runtime_error {
 public:
-    SocketException(const std::string &message, const ErrorCode &error): 
-        message_(message), error_(error) {}
-
+    SocketException(const std::string &message, const ErrorCode &error);
     ~SocketException();
 
     const ErrorCode &getErrorCode() const { return error_; }
 
-    const char* what() const noexcept override;
-
 protected:
-    std::string message_;
     ErrorCode error_;
 };
 
@@ -58,15 +60,14 @@ public:
 
 class GAIException: public SocketException {
 public:
-    GAIException(const std::string &message, int error);
-    GAIException(int error);
+    GAIException(const std::string &message, int error = 0);
     ~GAIException();
 };
 
 [[ noreturn ]] void sys_error(const std::string &message, int error);
 [[ noreturn ]] void sys_error(const std::string &message);
+
 [[ noreturn ]] void gai_error(const std::string &message, int error);
-[[ noreturn ]] void gai_error(int error);
 
 }   // MiniSocket
 
