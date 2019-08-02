@@ -61,40 +61,6 @@ _WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()
 #endif
 }
 
-string get_last_system_error_str()
-{
-    HLOCAL hlocal = NULL;
-    FormatMessage(
-        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL,
-        WSAGetLastError(), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
-        (LPTSTR) &hlocal, 0, NULL);
-    std::string err_msg((const char *)hlocal);
-    LocalFree(hlocal);
-
-    return err_msg;
-}
-
-string get_gai_error_str(int n)
-{
-    return get_last_system_error_str();
-}
-
-}   // namespace MiniSocket
-
-#else   // not win32
-
-namespace MiniSocket {
-
-string get_last_system_error_str()
-{
-    return strerror(errno);
-}
-
-string get_gai_error_str(int n)
-{
-    return gai_strerror(n);
-}
-
 }   // namespace MiniSocket
 
 #endif
@@ -171,6 +137,16 @@ MiniSocket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_
 }   // namespace
 
 namespace MiniSocket {
+
+inline
+ErrorCode get_last_sys_error()
+{
+#if defined WIN32 or defined _WIN32
+    return make_sys_error(WSAGetLastError());
+#else
+    return make_sys_error(errno);
+#endif
+}
 
 // SocketAddressView
 SocketAddressView::SocketAddressView(const sockaddr *addrVal, socklen_t addrLenVal) : addr_(addrVal), addrLen_(addrLenVal)
@@ -277,9 +253,9 @@ void Socket::open(NetworkLayerType version, TransportLayerType type)
     createSocket(static_cast<int>(version), static_cast<int>(type), 0);   
 }
 
-bool Socket::open(NetworkLayerType version, TransportLayerType type, const std::nothrow_t &nothrow_value)
+bool Socket::open(NetworkLayerType version, TransportLayerType type, ErrorCode &ec)
 {
-    return createSocket(static_cast<int>(version), static_cast<int>(type), 0, nothrow_value);
+    return createSocket(static_cast<int>(version), static_cast<int>(type), 0, ec);
 }
 
 void Socket::close()
@@ -321,13 +297,17 @@ void Socket::createSocket(int domain, int type, int protocol)
     }
 }
 
-bool Socket::createSocket(int domain, int type, int protocol, const std::nothrow_t &nothrow_value)
+bool Socket::createSocket(int domain, int type, int protocol, ErrorCode &ec)
 {
     if (isOpened())
         close();
 
     sockDesc_ = socket(domain, type, protocol);
-    return isOpened();
+    if (!isOpened()) {
+        ec = get_last_sys_error();
+        return false;
+    }
+    return true;
 }
 
 void Socket::bind(const SocketAddress &localAddress)
@@ -352,16 +332,24 @@ void CommunicatingSocket::connect(const SocketAddressView &foreignAddress)
     }
 }
 
-bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value)
+bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, ErrorCode &ec)
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
-    return (ret == 0);
+    if (ret != 0) {
+        ec = get_last_sys_error();
+        return false;
+    }
+    return true;
 }
 
-bool CommunicatingSocket::connect(const SocketAddressView &foreignAddress, const std::nothrow_t &nothrow_value)
+bool CommunicatingSocket::connect(const SocketAddressView &foreignAddress, ErrorCode &ec)
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
-    return (ret == 0);
+    if (ret != 0) {
+        ec = get_last_sys_error();
+        return false;
+    }
+    return true;
 }
 
 int CommunicatingSocket::send(const char *buffer, int bufferLen)

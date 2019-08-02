@@ -223,15 +223,15 @@ public:
     void open(NetworkLayerType version, TransportLayerType type);
 
     /**
-     * @brief 打开socket, 并禁止异常抛出
+     * @brief 打开socket, 以ErrorCode方式替代SocketException
      *
      * @param version 网络层协议版本
      * @param type 传输层协议版本
-     * @param nothrow_value 传入std::nothrow
+     * @param[out] ec 返回错误码
      *
-     * @return 如果成功返回true; 否则返回false.
+     * @return 如果成功返回true; 否则返回false, 并设置错误码.
      */
-    bool open(NetworkLayerType version, TransportLayerType type, const std::nothrow_t &nothrow_value);
+    bool open(NetworkLayerType version, TransportLayerType type, ErrorCode &ec);
 
     /**
      * @brief 关闭socket
@@ -268,7 +268,7 @@ protected:
 
     Socket() = default;
     void createSocket(int domain, int type, int protocol);
-    bool createSocket(int domain, int type, int protocol, const std::nothrow_t &nothrow_value);
+    bool createSocket(int domain, int type, int protocol, ErrorCode &ec);
 };
 
 /**
@@ -292,12 +292,12 @@ public:
      * @brief 连接到远端地址
      *
      * @param foreignAddress 远端地址
-     * @param nothrow_value 传入std::nothrow
+     * @param[out] ec 返回错误码
      *
-     * @return 如果连接成功, 返回true; 否则返回false
+     * @return 如果成功返回true; 否则返回false, 并设置错误码.
      */
-    bool connect(const SocketAddress &foreignAddress, const std::nothrow_t &nothrow_value);
-    bool connect(const SocketAddressView &foreignAddress, const std::nothrow_t &nothrow_value);
+    bool connect(const SocketAddress &foreignAddress, ErrorCode &ec);
+    bool connect(const SocketAddressView &foreignAddress, ErrorCode &ec);
 
     /**
      * @brief 发送数据

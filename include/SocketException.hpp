@@ -24,6 +24,7 @@ struct ErrorCode {
     int value = 0;
 
     ErrorCode(int type_, int value_): type(type_), value(value_) {}
+    ErrorCode() = default;
 };
 
 inline
