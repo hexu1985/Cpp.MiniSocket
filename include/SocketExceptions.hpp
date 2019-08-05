@@ -70,6 +70,13 @@ ErrorCode make_gai_error(int error)
 }
 
 /**
+ * @brief 获取最近一次的系统错误码
+ *
+ * @return 系统错误码
+ */
+ErrorCode get_last_sys_error();
+
+/**
  * @brief MiniSocket库的所有异常类的基类, 表征任何Socket相关接口的异常
  */
 class SocketException : public std::runtime_error {

@@ -4,11 +4,20 @@
 
 #include <errno.h>
 
-#include "SocketException.hpp"
+#include "SocketExceptions.hpp"
 
 using namespace std;
 
 namespace MiniSocket {
+
+ErrorCode get_last_sys_error()
+{
+#if defined WIN32 or defined _WIN32
+    return make_sys_error(WSAGetLastError());
+#else
+    return make_sys_error(errno);
+#endif
+}
 
 SocketException::SocketException(const string &message, const ErrorCode &error): 
     runtime_error(message), error_(error) 
@@ -77,7 +86,7 @@ string get_gai_error_str(const string &title, int error)
     return message;
 }
 
-}   // namespace {
+}   // namespace 
 
 SYSException::SYSException(const string &message, int error):
     SocketException(get_sys_error_str(message, error), make_sys_error(error))
