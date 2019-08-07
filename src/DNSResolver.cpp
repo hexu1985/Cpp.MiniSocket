@@ -1,13 +1,5 @@
-#include "mini_socket.hpp"
-#include "SYSException.hpp"
+#include "DNSResolver.hpp"
 #include "GAIException.hpp"
-
-#include <sstream>
-#include <cstring>
-
-#ifndef NDEBUG
-#include <iostream>
-#endif
 
 using namespace std;
 
@@ -29,7 +21,7 @@ DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, add
                         freeaddrinfo(ptr);
                     };
 
-    return Iterator(std::shared_ptr<addrinfo>(res, deleter));
+    return Iterator(shared_ptr<addrinfo>(res, deleter));
 }
 
 DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, 
