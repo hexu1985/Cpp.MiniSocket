@@ -1,4 +1,6 @@
 #include "mini_socket.hpp"
+#include "SYSException.hpp"
+#include "GAIException.hpp"
 
 #include <sstream>
 #include <cstring>
@@ -74,7 +76,7 @@ bool Socket::createSocket(int domain, int type, int protocol, ErrorCode &ec)
 
     sockDesc_ = socket(domain, type, protocol);
     if (!isOpened()) {
-        ec = get_last_sys_error();
+        get_last_sys_error(ec);
         return false;
     }
     return true;
@@ -106,7 +108,7 @@ bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, ErrorCode
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
     if (ret != 0) {
-        ec = get_last_sys_error();
+        get_last_sys_error(ec);
         return false;
     }
     return true;
@@ -116,7 +118,7 @@ bool CommunicatingSocket::connect(const SocketAddressView &foreignAddress, Error
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
     if (ret != 0) {
-        ec = get_last_sys_error();
+        get_last_sys_error(ec);
         return false;
     }
     return true;

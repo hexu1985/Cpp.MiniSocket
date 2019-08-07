@@ -1,6 +1,8 @@
 #ifndef MINI_SOCKET_SOCKET_ERROR_INC
 #define MINI_SOCKET_SOCKET_ERROR_INC
 
+#include <string>
+
 namespace MiniSocket {
 
 /**
@@ -65,7 +67,18 @@ ErrorCode make_gai_error(int error)
  *
  * @return 系统错误码
  */
-ErrorCode get_last_sys_error();
+int get_last_sys_error();
+
+inline
+void get_last_sys_error(ErrorCode &ec)
+{
+    ec = make_sys_error(get_last_sys_error());
+}
+
+std::string get_sys_error_str(int error);
+std::string get_gai_error_str(int error);
+std::string get_sys_error_str(const std::string &title, int error);
+std::string get_gai_error_str(const std::string &title, int error);
 
 }   // MiniSocket
 

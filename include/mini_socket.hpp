@@ -28,7 +28,7 @@
 #include <tuple>
 #include <memory>
 #include <iostream>
-#include "SocketExceptions.hpp"
+#include "SocketException.hpp"
 #include "SocketCommon.hpp"
 #include "SocketAddress.hpp"
 #include "SocketAddressView.hpp"

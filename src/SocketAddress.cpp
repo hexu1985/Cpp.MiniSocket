@@ -1,5 +1,5 @@
 #include "SocketAddress.hpp"
-#include "SocketExceptions.hpp"
+#include "SYSException.hpp"
 
 #include <sstream>
 

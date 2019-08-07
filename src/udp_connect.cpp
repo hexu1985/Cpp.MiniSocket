@@ -1,4 +1,5 @@
 #include "udp_connect.hpp"
+#include "SYSException.hpp"
 
 namespace MiniSocket {
 

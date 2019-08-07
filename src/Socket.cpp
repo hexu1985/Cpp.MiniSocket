@@ -1,5 +1,5 @@
 #include "Socket.hpp"
-#include "SocketExceptions.hpp"
+#include "SYSException.hpp"
 
 using namespace std;
 
