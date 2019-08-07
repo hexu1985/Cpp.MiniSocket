@@ -1,3 +1,10 @@
+/**
+ * @file TCPSocket.hpp
+ * @brief 面向流的Socket
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-08-07
+ */
 #ifndef MINI_SOCKET_TCP_SOCKET_INC
 #define MINI_SOCKET_TCP_SOCKET_INC
 

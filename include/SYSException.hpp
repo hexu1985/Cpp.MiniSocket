@@ -1,3 +1,10 @@
+/**
+ * @file SYSException.hpp
+ * @brief 系统类型的异常
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-08-07
+ */
 #ifndef SOCKET_SYS_EXCEPTION_INC
 #define SOCKET_SYS_EXCEPTION_INC
 

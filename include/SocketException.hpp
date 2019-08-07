@@ -1,6 +1,6 @@
 /**
  * @file SocketException.hpp
- * @brief socket相关异常类的定义
+ * @brief MiniSocket库的所有异常类的基类, 表征任何Socket相关接口的异常
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-08-02

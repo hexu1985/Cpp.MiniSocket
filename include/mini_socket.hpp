@@ -12,6 +12,9 @@
 #define MINI_SOCKET_INC
 
 #include "SocketException.hpp"
+#include "SYSException.hpp"
+#include "GAIException.hpp"
+#include "SocketError.hpp"
 #include "SocketCommon.hpp"
 #include "SocketAddress.hpp"
 #include "SocketAddressView.hpp"
@@ -22,5 +25,7 @@
 #include "UDPSocket.hpp"
 #include "UDPClientSocket.hpp"
 #include "DNSResolver.hpp"
+#include "tcp_connect.hpp"
+#include "udp_connect.hpp"
 
 #endif

@@ -1,3 +1,10 @@
+/**
+ * @file UDPSocket.hpp
+ * @brief 用户报文Socket
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-08-07
+ */
 #ifndef MINI_SOCKET_UDP_SOCKET_INC
 #define MINI_SOCKET_UDP_SOCKET_INC
 

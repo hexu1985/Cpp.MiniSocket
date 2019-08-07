@@ -1,3 +1,10 @@
+/**
+ * @file SocketError.hpp
+ * @brief 一种简单的统一错误码: 包含错误类型和错误值
+ * @author hexu_1985@sina.com
+ * @version 1.0
+ * @date 2019-08-07
+ */
 #ifndef MINI_SOCKET_SOCKET_ERROR_INC
 #define MINI_SOCKET_SOCKET_ERROR_INC
 
