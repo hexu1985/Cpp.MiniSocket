@@ -61,8 +61,8 @@ public:
      *
      * @return 如果成功返回true; 否则返回false, 并设置错误码.
      */
-    bool connect(const SocketAddress &foreignAddress, ErrorCode &ec);
-    bool connect(const SocketAddressView &foreignAddress, ErrorCode &ec);
+    bool connect(const SocketAddress &foreignAddress, SocketError &ec);
+    bool connect(const SocketAddressView &foreignAddress, SocketError &ec);
 
     /**
      * @brief 发送数据

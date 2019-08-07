@@ -25,7 +25,7 @@ void Socket::open(NetworkLayerType version, TransportLayerType type)
     createSocket(static_cast<int>(version), static_cast<int>(type), 0);   
 }
 
-bool Socket::open(NetworkLayerType version, TransportLayerType type, ErrorCode &ec)
+bool Socket::open(NetworkLayerType version, TransportLayerType type, SocketError &ec)
 {
     return createSocket(static_cast<int>(version), static_cast<int>(type), 0, ec);
 }
@@ -69,7 +69,7 @@ void Socket::createSocket(int domain, int type, int protocol)
     }
 }
 
-bool Socket::createSocket(int domain, int type, int protocol, ErrorCode &ec)
+bool Socket::createSocket(int domain, int type, int protocol, SocketError &ec)
 {
     if (isOpened())
         close();
@@ -104,7 +104,7 @@ void CommunicatingSocket::connect(const SocketAddressView &foreignAddress)
     }
 }
 
-bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, ErrorCode &ec)
+bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, SocketError &ec)
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
     if (ret != 0) {
@@ -114,7 +114,7 @@ bool CommunicatingSocket::connect(const SocketAddress &foreignAddress, ErrorCode
     return true;
 }
 
-bool CommunicatingSocket::connect(const SocketAddressView &foreignAddress, ErrorCode &ec)
+bool CommunicatingSocket::connect(const SocketAddressView &foreignAddress, SocketError &ec)
 {
     int ret = ::connect(sockDesc_, foreignAddress.getSockaddr(), foreignAddress.getSockaddrLen());
     if (ret != 0) {

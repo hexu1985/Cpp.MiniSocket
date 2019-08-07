@@ -24,7 +24,7 @@ public:
      * @param message 异常消息
      * @param error 错误码
      */
-    SocketException(const std::string &message, const ErrorCode &error);
+    SocketException(const std::string &message, const SocketError &error);
 
     /**
      * @brief 析构SocketException对象
@@ -36,10 +36,10 @@ public:
      *
      * @return 错误码
      */
-    const ErrorCode &getErrorCode() const { return error_; }
+    const SocketError &getSocketError() const { return error_; }
 
 protected:
-    ErrorCode error_;   // 统一错误码
+    SocketError error_;   // 统一错误码
 };
 
 }   // MiniSocket

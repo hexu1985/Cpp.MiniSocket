@@ -10,7 +10,7 @@ using namespace std;
 
 namespace MiniSocket {
 
-SocketException::SocketException(const string &message, const ErrorCode &error): 
+SocketException::SocketException(const string &message, const SocketError &error): 
     runtime_error(message), error_(error) 
 {
 }

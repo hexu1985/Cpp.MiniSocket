@@ -59,7 +59,7 @@ public:
     void open(NetworkLayerType version, TransportLayerType type);
 
     /**
-     * @brief 打开socket, 以ErrorCode方式替代SocketException
+     * @brief 打开socket, 以SocketError方式替代SocketException
      *
      * @param version 网络层协议版本
      * @param type 传输层协议版本
@@ -67,7 +67,7 @@ public:
      *
      * @return 如果成功返回true; 否则返回false, 并设置错误码.
      */
-    bool open(NetworkLayerType version, TransportLayerType type, ErrorCode &ec);
+    bool open(NetworkLayerType version, TransportLayerType type, SocketError &ec);
 
     /**
      * @brief 关闭socket
@@ -104,7 +104,7 @@ protected:
 
     Socket() = default;
     void createSocket(int domain, int type, int protocol);
-    bool createSocket(int domain, int type, int protocol, ErrorCode &ec);
+    bool createSocket(int domain, int type, int protocol, SocketError &ec);
 };
 
 }   // namespace MiniSocket

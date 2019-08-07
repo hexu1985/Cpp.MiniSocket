@@ -6,34 +6,34 @@
 namespace MiniSocket {
 
 /**
- * @brief 错误类型
- */
-enum class ErrorType: uint32_t {
-    UNKNOWN = 0,        /**< 未知类型 */
-    SYS = 1,            /**< 系统层: use errno */
-    GAI = 2,            /**< getaddrinfo接口返回的错误码: EAI_* */
-    USR = UINT16_MAX,   /**< 用户侧错误 */
-};
-
-/**
  * @brief 一种简单的统一错误码: 包含错误类型和错误值
  */
-struct ErrorCode {
-    int type = (int) ErrorType::UNKNOWN;    // 错误类型
-    int value = 0;                          // 错误值
+struct SocketError {
+    /**
+     * @brief 错误类型
+     */
+    enum ErrorType {
+        UNKNOWN = 0,        /**< 未知类型 */
+        SYS = 1,            /**< 系统层: use errno */
+        GAI = 2,            /**< getaddrinfo接口返回的错误码: EAI_* */
+        USR = UINT16_MAX,   /**< 用户侧错误 */   
+    };
+
+    int type = UNKNOWN;     // 错误类型
+    int code = 0;           // 错误值
 
     /**
      * @brief 创建一个错误码对象
      *
      * @param type_ 错误类型
-     * @param value_ 错误值
+     * @param code_ 错误值
      */
-    ErrorCode(int type_, int value_): type(type_), value(value_) {}
+    SocketError(int type_, int code_): type(type_), code(code_) {}
 
     /**
      * @brief 创建一个默认错误码对象
      */
-    ErrorCode() = default;
+    SocketError() = default;
 };
 
 /**
@@ -44,9 +44,9 @@ struct ErrorCode {
  * @return 系统类型的错误码
  */
 inline
-ErrorCode make_sys_error(int error)
+SocketError make_sys_error(int error)
 {
-    return ErrorCode((int) ErrorType::SYS, error);
+    return SocketError(SocketError::SYS, error);
 }
 
 /**
@@ -57,9 +57,9 @@ ErrorCode make_sys_error(int error)
  * @return 获取地址信息类型的错误码
  */
 inline
-ErrorCode make_gai_error(int error)
+SocketError make_gai_error(int error)
 {
-    return ErrorCode((int) ErrorType::GAI, error);
+    return SocketError(SocketError::GAI, error);
 }
 
 /**
@@ -70,7 +70,7 @@ ErrorCode make_gai_error(int error)
 int get_last_sys_error();
 
 inline
-void get_last_sys_error(ErrorCode &ec)
+void get_last_sys_error(SocketError &ec)
 {
     ec = make_sys_error(get_last_sys_error());
 }
