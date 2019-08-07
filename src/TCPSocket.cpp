@@ -5,7 +5,6 @@ using namespace std;
 
 namespace MiniSocket {
 
-// SocketStreamBuffer 
 template <class CharT, class Traits = std::char_traits<CharT> >
 class SocketStreamBuffer : public std::basic_streambuf<CharT, Traits> {
 public:
@@ -56,7 +55,6 @@ private:
     CharT outBuffer_[1024];
 };
 
-// TCPSocket 
 TCPSocket::TCPSocket(SOCKET sockDesc)
 {
     sockDesc_ = sockDesc;

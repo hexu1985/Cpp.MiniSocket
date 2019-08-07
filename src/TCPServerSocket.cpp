@@ -6,7 +6,6 @@ using namespace std;
 
 namespace MiniSocket {
 
-// TCPServerSocket
 TCPServerSocket::TCPServerSocket(const SocketAddress &localAddress)
 {
     int domain = localAddress.getSockaddr()->sa_family;
