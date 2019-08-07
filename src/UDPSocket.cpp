@@ -1,8 +1,6 @@
 #include "UDPSocket.hpp"
 #include "SYSException.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
 
 UDPSocket::UDPSocket(const SocketAddress &localAddress)
