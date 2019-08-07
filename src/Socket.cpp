@@ -55,7 +55,12 @@ _WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()
 #endif
 }
 
-// Socket
+}   // namespace MiniSocket
+
+#endif
+
+namespace MiniSocket {
+
 Socket::~Socket()
 {
     if (isOpened())
@@ -132,5 +137,3 @@ void Socket::bind(const SocketAddress &localAddress)
 }
 
 }   // namespace MiniSocket
-
-#endif

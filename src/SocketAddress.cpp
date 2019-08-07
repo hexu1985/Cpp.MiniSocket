@@ -1,6 +1,7 @@
 #include "SocketAddress.hpp"
 #include "SYSException.hpp"
 
+#include <cstring>
 #include <sstream>
 
 using namespace std;
