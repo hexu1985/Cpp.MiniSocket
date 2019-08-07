@@ -49,7 +49,7 @@ string SocketAddress::toString() const
     return to_string(getSockaddr(), getSockaddrLen());
 }
 
-tuple<std::string, uint16_t> SocketAddress::getAddressPort() const
+tuple<string, uint16_t> SocketAddress::getAddressPort() const
 {
     return get_address_port(getSockaddr(), getSockaddrLen());
 }
