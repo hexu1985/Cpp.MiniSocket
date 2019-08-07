@@ -22,80 +22,10 @@
 #include "SocketAddressView.hpp"
 #include "Socket.hpp"
 #include "CommunicatingSocket.hpp"
+#include "TCPSocket.hpp"
+#include "TCPServerSocket.hpp"
 
 namespace MiniSocket {
-
-/**
- * @brief 面向流的Socket
- */
-class TCPSocket : public CommunicatingSocket {
-public:
-    TCPSocket() = default;
-
-    /**
-     * @brief 创建一个面向流的Socket, 并connect到服务器端地址
-     *
-     * @param foreignAddress 服务器端地址
-     *
-     * @note 可能会抛出SocketException异常
-     */
-    TCPSocket(const SocketAddress &foreignAddress); 
-
-    /**
-     * @brief 发送所有数据
-     *
-     * @param buffer 要发送数据的内容
-     * @param bufferLen 数据长度
-     *
-     * @note 可能会抛出SocketException异常
-     */
-    void sendAll(const char *buffer, int bufferLen); 
-
-    /**
-     * @brief 获取当前socket的iostream子类
-     *
-     * @return iostream子类
-     */
-    std::iostream &getStream(); 
-
-private:
-    friend class TCPServerSocket;
-    TCPSocket(SOCKET sockDesc);
-
-    std::iostream *myStream_ = 0;
-    std::streambuf *myStreambuf_ = 0;
-};
-
-/**
- * @brief 面向流的Socket的Server端
- */
-class TCPServerSocket : public Socket {
-public:
-    TCPServerSocket() = default;
-
-    /**
-     * @brief 创建一个面向流的Socket的Server端, 绑定本地Socket地址, 并监听
-     *
-     * @param localAddress 绑定本地地址
-     */
-    TCPServerSocket(const SocketAddress &localAddress); 
-
-    /**
-     * @brief 设置排队队列长度
-     *
-     * @param backlog 排队队列长度 
-     *
-     * @note 当创建一个默认构造TCPServerSocket的时候, 才需要手动调用这个接口
-     */
-	void listen(int backlog);
-
-    /**
-     * @brief 从已完成连接队列返回一下个已连接socket
-     *
-     * @return 已连接的TCPSocket对象
-     */
-    std::shared_ptr<TCPSocket> accept();
-};
 
 /**
  * @brief 用户报文Socket
