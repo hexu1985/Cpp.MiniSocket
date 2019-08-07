@@ -1,9 +1,9 @@
 #include "DNSResolver.hpp"
 #include "GAIException.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::shared_ptr;
 
 // DNSResolver 
 DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, addrinfo *hints)

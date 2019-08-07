@@ -12,9 +12,10 @@
 #define MINI_SOCKET_TCP_CONNECT_INC
 
 #include <memory>
-#include "mini_socket.hpp"
 
 namespace MiniSocket {
+
+class TCPSocket;
 
 std::shared_ptr<TCPSocket> tcp_connect(const char *host, const char *serv);
 

@@ -3,9 +3,13 @@
 
 namespace MiniSocket {
 
-std::tuple<std::string, uint16_t> get_address_port(const sockaddr *sa, socklen_t salen)
+using std::ostringstream;
+using std::string;
+using std::tuple;
+
+tuple<string, uint16_t> get_address_port(const sockaddr *sa, socklen_t salen)
 {
-	static const std::tuple<std::string, uint16_t> null_result;
+	static const tuple<string, uint16_t> null_result;
 	char str[128] = {0};
 
 	switch (sa->sa_family) {
@@ -15,7 +19,7 @@ std::tuple<std::string, uint16_t> get_address_port(const sockaddr *sa, socklen_t
 		if (inet_ntop(AF_INET, &sin->sin_addr, str, sizeof(str)) == NULL)
 			return null_result;
 
-        return make_tuple(std::string(str), ntohs(sin->sin_port));
+        return make_tuple(string(str), ntohs(sin->sin_port));
 	}
 
 	case AF_INET6: {
@@ -24,7 +28,7 @@ std::tuple<std::string, uint16_t> get_address_port(const sockaddr *sa, socklen_t
 		if (inet_ntop(AF_INET6, &sin6->sin6_addr, str, sizeof(str)) == NULL)
 			return null_result;
 
-        return make_tuple(std::string(str), ntohs(sin6->sin6_port));
+        return make_tuple(string(str), ntohs(sin6->sin6_port));
 	}
 
 	default:
@@ -33,17 +37,17 @@ std::tuple<std::string, uint16_t> get_address_port(const sockaddr *sa, socklen_t
     return null_result;
 }
 
-std::string to_string(const sockaddr *sa, socklen_t salen)
+string to_string(const sockaddr *sa, socklen_t salen)
 {
-    static const std::string null_result;
+    static const string null_result;
 
-    std::string address;
+    string address;
     uint16_t port;
-    std::tie(address, port) = get_address_port(sa, salen);
+    tie(address, port) = get_address_port(sa, salen);
     if (address.empty())
         return null_result;
 
-    std::ostringstream os;
+    ostringstream os;
     if (sa->sa_family == AF_INET6)
         os << "[";
     os << address;

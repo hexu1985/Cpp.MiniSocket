@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cerrno>
 
 #include "UDPClientSocket.hpp"
 #include "SYSException.hpp"

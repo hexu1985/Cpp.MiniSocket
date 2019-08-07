@@ -2,13 +2,11 @@
 #include <windows.h>
 #endif
 
-#include <errno.h>
-
 #include "SocketException.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::string;
 
 SocketException::SocketException(const string &message, const SocketError &error): 
     runtime_error(message), error_(error) 

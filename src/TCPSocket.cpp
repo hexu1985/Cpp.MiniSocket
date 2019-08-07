@@ -1,12 +1,14 @@
 #include "TCPSocket.hpp"
 #include <iostream>
 
-using namespace std;
-
 namespace MiniSocket {
 
-template <class CharT, class Traits = std::char_traits<CharT> >
-class SocketStreamBuffer : public std::basic_streambuf<CharT, Traits> {
+using std::char_traits;
+using std::basic_streambuf;
+using std::iostream;
+
+template <class CharT, class Traits = char_traits<CharT> >
+class SocketStreamBuffer : public basic_streambuf<CharT, Traits> {
 public:
     typedef typename Traits::int_type                 int_type;
 
@@ -79,7 +81,7 @@ void TCPSocket::sendAll(const char *buffer, int bufferLen)
 	}
 }
 
-std::iostream &TCPSocket::getStream()
+iostream &TCPSocket::getStream()
 {
     if (myStream_ == NULL) {
         myStreambuf_ = new SocketStreamBuffer<char>(this);

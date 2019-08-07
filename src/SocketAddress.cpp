@@ -4,9 +4,11 @@
 #include <cstring>
 #include <sstream>
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::ostringstream;
+using std::string;
+using std::tuple;
 
 SocketAddress::SocketAddress(const char *address, uint16_t port): SocketAddress()
 {

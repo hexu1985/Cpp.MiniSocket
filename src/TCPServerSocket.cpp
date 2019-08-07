@@ -2,9 +2,9 @@
 #include "TCPSocket.hpp"
 #include "SYSException.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::shared_ptr;
 
 TCPServerSocket::TCPServerSocket(const SocketAddress &localAddress)
 {

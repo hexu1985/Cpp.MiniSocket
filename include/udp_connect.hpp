@@ -12,9 +12,10 @@
 #define MINI_SOCKET_UDP_CONNECT_INC
 
 #include <memory>
-#include "mini_socket.hpp"
 
 namespace MiniSocket {
+
+class UDPClientSocket;
 
 std::shared_ptr<UDPClientSocket> udp_connect(const char *host, const char *serv);
 

@@ -1,8 +1,8 @@
 #include "GAIException.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::string;
 
 GAIException::GAIException(const string &message, int error):
     SocketException(get_gai_error_str(message, error), make_gai_error(error))

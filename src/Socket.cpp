@@ -1,8 +1,6 @@
 #include "Socket.hpp"
 #include "SYSException.hpp"
 
-using namespace std;
-
 #if defined WIN32 or defined _WIN32
 
 #ifndef WSVERS
@@ -57,6 +55,8 @@ _WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()
 
 }   // namespace MiniSocket
 
+#else
+#include <unistd.h>
 #endif
 
 namespace MiniSocket {

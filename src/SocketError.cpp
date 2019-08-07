@@ -1,11 +1,12 @@
 #include <cstring>
+#include <cerrno>
 
 #include "SocketError.hpp"
 #include "SocketCommon.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::string;
 
 int get_last_sys_error()
 {

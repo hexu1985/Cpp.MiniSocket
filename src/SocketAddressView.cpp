@@ -1,10 +1,10 @@
 #include "SocketAddressView.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
 
-// SocketAddressView
+using std::string;
+using std::tuple;
+
 SocketAddressView::SocketAddressView(const sockaddr *addrVal, socklen_t addrLenVal) : addr_(addrVal), addrLen_(addrLenVal)
 {
 }

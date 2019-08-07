@@ -1,14 +1,18 @@
 #include "tcp_connect.hpp"
 #include "SYSException.hpp"
+#include "TCPSocket.hpp"
+#include "DNSResolver.hpp"
 
 namespace MiniSocket {
 
-std::shared_ptr<TCPSocket> tcp_connect(const char *host, const char *serv)
+using std::shared_ptr;
+
+shared_ptr<TCPSocket> tcp_connect(const char *host, const char *serv)
 {
     DNSResolver resolver;
     SocketError ec;
     for (const auto &addr: resolver.query(host, serv, TransportLayerType::TCP)) {
-        std::shared_ptr<TCPSocket> sock(new TCPSocket);
+        shared_ptr<TCPSocket> sock(new TCPSocket);
         if (!sock->open(addr.getNetworkLayerType(), TransportLayerType::TCP, ec))  
             continue;
 

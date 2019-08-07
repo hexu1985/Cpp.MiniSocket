@@ -1,8 +1,8 @@
 #include "SYSException.hpp"
 
-using namespace std;
-
 namespace MiniSocket {
+
+using std::string;
 
 SYSException::SYSException(const string &message, int error):
     SocketException(get_sys_error_str(message, error), make_sys_error(error))
