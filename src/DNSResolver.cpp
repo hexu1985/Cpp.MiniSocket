@@ -1,6 +1,10 @@
 #include "DNSResolver.hpp"
 #include "GAIException.hpp"
 
+#ifndef NDEBUG
+#include <iostream>
+#endif
+
 namespace MiniSocket {
 
 using std::shared_ptr;
@@ -16,7 +20,7 @@ DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv, add
 
     auto deleter = [](addrinfo *ptr) {
 #ifndef NDEBUG
-                        cout << "freeaddrinfo called" << endl;
+						std::cout << "freeaddrinfo called" << std::endl;
 #endif
                         freeaddrinfo(ptr);
                     };
