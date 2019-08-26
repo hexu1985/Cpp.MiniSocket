@@ -20,13 +20,13 @@ struct SocketError {
      * @brief 错误类型
      */
     enum ErrorType {
-        UNKNOWN = 0,        /**< 未知类型 */
+        NOERROR = 0,        /**< 没有错误 */
         SYS = 1,            /**< 系统层: use errno */
         GAI = 2,            /**< getaddrinfo接口返回的错误码: EAI_* */
         USR = UINT16_MAX,   /**< 用户侧错误 */   
     };
 
-    int type = UNKNOWN;     // 错误类型
+    int type = NOERROR;     // 错误类型
     int code = 0;           // 错误值
 
     /**
