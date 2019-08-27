@@ -7,7 +7,7 @@
 #include "str_cli.hpp"
 
 using namespace std;
-using namespace MiniSocket;
+using namespace mini_socket;
 
 int main(int argc, char *argv[])
 {

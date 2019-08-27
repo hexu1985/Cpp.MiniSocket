@@ -6,7 +6,7 @@
 #include <string>
 
 using namespace std;
-using namespace MiniSocket;
+using namespace mini_socket;
 
 void
 str_cli(istream &in, TCPSocket &sock)

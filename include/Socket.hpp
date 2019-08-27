@@ -14,7 +14,7 @@
 #include "SocketError.hpp"
 
 #if defined WIN32 or defined _WIN32
-namespace MiniSocket {
+namespace mini_socket {
 
 class _WSAStartupHolder_;
 
@@ -29,7 +29,7 @@ private:
 
 static _WSAStartupSharedHolder_ _wsa_startup_shared_holder_;
 
-}   // namespace MiniSocket
+}   // namespace mini_socket
 #else   // not WIN32
 
 typedef int SOCKET;
@@ -38,7 +38,7 @@ typedef int SOCKET;
 
 #endif
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 封装socket文件描述符的类, 所有具体socket功能类的基类
@@ -107,6 +107,6 @@ protected:
     bool createSocket(int domain, int type, int protocol, SocketError &ec);
 };
 
-}   // namespace MiniSocket
+}   // namespace mini_socket
 
 #endif

@@ -11,7 +11,7 @@
 #include <iosfwd>
 #include "CommunicatingSocket.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 面向流的Socket
@@ -54,6 +54,6 @@ private:
     std::streambuf *myStreambuf_ = 0;
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

@@ -1,6 +1,6 @@
 #include "SYSException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::string;
 
@@ -23,4 +23,4 @@ void sys_error(const string &message)
     throw SYSException(message, get_last_sys_error());
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

@@ -4,7 +4,7 @@
 #include "SocketError.hpp"
 #include "SocketCommon.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::string;
 
@@ -71,4 +71,4 @@ string get_gai_error_str(const string &title, int error)
     return message;
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

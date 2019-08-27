@@ -5,6 +5,6 @@
 #include "mini_socket.hpp"
 
 void
-dg_cli(std::istream &in, MiniSocket::UDPClientSocket &sock);
+dg_cli(std::istream &in, mini_socket::UDPClientSocket &sock);
 
 #endif

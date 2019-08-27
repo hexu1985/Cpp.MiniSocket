@@ -13,12 +13,12 @@
 
 #include <memory>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 class TCPSocket;
 
 std::shared_ptr<TCPSocket> tcp_connect(const char *host, const char *serv);
 
-}   // namespace MiniSocket
+}   // namespace mini_socket
 
 #endif

@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 一种简单的统一错误码: 包含错误类型和错误值
@@ -87,6 +87,6 @@ std::string get_gai_error_str(int error);
 std::string get_sys_error_str(const std::string &title, int error);
 std::string get_gai_error_str(const std::string &title, int error);
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

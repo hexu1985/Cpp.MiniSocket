@@ -5,6 +5,6 @@
 #include "mini_socket.hpp"
 
 void
-str_cli(std::istream &in, MiniSocket::TCPSocket &sock);
+str_cli(std::istream &in, mini_socket::TCPSocket &sock);
 
 #endif

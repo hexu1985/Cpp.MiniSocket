@@ -10,7 +10,7 @@
 
 #include "Socket.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 class TCPSocket;
 
@@ -45,6 +45,6 @@ public:
     std::shared_ptr<TCPSocket> accept();
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

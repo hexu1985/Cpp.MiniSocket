@@ -13,12 +13,12 @@
 
 #include <memory>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 class UDPClientSocket;
 
 std::shared_ptr<UDPClientSocket> udp_connect(const char *host, const char *serv);
 
-}   // namespace MiniSocket
+}   // namespace mini_socket
 
 #endif

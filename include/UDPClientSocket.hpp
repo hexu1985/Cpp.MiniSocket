@@ -10,7 +10,7 @@
 
 #include "CommunicatingSocket.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 面向连接的UDP Socket类
@@ -34,6 +34,6 @@ public:
     void disconnect();
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

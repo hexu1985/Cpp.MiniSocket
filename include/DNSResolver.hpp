@@ -12,7 +12,7 @@
 #include "SocketCommon.hpp"
 #include "SocketAddressView.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief DNS解析类
@@ -130,6 +130,6 @@ inline DNSResolver::Iterator end(const DNSResolver::Iterator &iter)
     return DNSResolver::Iterator();
 }
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

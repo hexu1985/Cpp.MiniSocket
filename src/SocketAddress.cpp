@@ -4,7 +4,7 @@
 #include <cstring>
 #include <sstream>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::ostringstream;
 using std::string;
@@ -72,4 +72,4 @@ NetworkLayerType SocketAddress::getNetworkLayerType() const
     return get_network_layer_type(getSockaddr(), getSockaddrLen());
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

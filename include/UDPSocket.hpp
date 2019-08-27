@@ -10,7 +10,7 @@
 
 #include "Socket.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 用户报文Socket
@@ -51,6 +51,6 @@ public:
             SocketAddress &sourceAddress); 
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

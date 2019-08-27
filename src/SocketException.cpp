@@ -4,7 +4,7 @@
 
 #include "SocketException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::string;
 
@@ -17,4 +17,4 @@ SocketException::~SocketException()
 {
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

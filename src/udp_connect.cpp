@@ -3,7 +3,7 @@
 #include "UDPClientSocket.hpp"
 #include "DNSResolver.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::shared_ptr;
 
@@ -25,4 +25,4 @@ shared_ptr<UDPClientSocket> udp_connect(const char *host, const char *serv)
     sys_error("udp connect error");
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

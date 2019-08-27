@@ -2,7 +2,7 @@
 #include "SYSException.hpp"
 #include "SocketAddressView.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 // CommunicatingSocket 
 void CommunicatingSocket::connect(const SocketAddress &foreignAddress)
@@ -71,4 +71,4 @@ SocketAddress CommunicatingSocket::getForeignAddress() const
     return SocketAddress((sockaddr *)&addr, addrLen);
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

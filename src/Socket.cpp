@@ -7,7 +7,7 @@
 #define WSVERS MAKEWORD(2, 0)
 #endif
 
-namespace MiniSocket {
+namespace mini_socket {
 
 class _WSAStartupHolder_ {
 public:
@@ -53,13 +53,13 @@ _WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()
 #endif
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket
 
 #else
 #include <unistd.h>
 #endif
 
-namespace MiniSocket {
+namespace mini_socket {
 
 Socket::~Socket()
 {
@@ -136,4 +136,4 @@ void Socket::bind(const SocketAddress &localAddress)
     }
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

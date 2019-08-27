@@ -1,7 +1,7 @@
 #include "SocketCommon.hpp"
 #include <sstream>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::ostringstream;
 using std::string;
@@ -57,15 +57,15 @@ string to_string(const sockaddr *sa, socklen_t salen)
     return os.str();
 }
 
-MiniSocket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_t salen)
+mini_socket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_t salen)
 {
-    MiniSocket::NetworkLayerType type = MiniSocket::NetworkLayerType::UNKNOWN; 
+    mini_socket::NetworkLayerType type = mini_socket::NetworkLayerType::UNKNOWN; 
 	switch (sa->sa_family) {
 	case AF_INET:
-        type = MiniSocket::NetworkLayerType::IPv4;
+        type = mini_socket::NetworkLayerType::IPv4;
         break;
 	case AF_INET6:
-        type = MiniSocket::NetworkLayerType::IPv6;
+        type = mini_socket::NetworkLayerType::IPv6;
         break;
 	default:
         break;
@@ -74,4 +74,4 @@ MiniSocket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_
     return type;
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

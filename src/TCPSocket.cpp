@@ -1,7 +1,7 @@
 #include "TCPSocket.hpp"
 #include <iostream>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::char_traits;
 using std::basic_streambuf;
@@ -90,4 +90,4 @@ iostream &TCPSocket::getStream()
     return *myStream_;
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

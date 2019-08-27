@@ -1,6 +1,6 @@
 #include "GAIException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::string;
 
@@ -22,4 +22,4 @@ void gai_error(const string &message, int error)
 #endif
 }
 
-}   // namespace MiniSocket
+}   // namespace mini_socket

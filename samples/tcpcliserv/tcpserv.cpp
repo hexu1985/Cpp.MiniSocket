@@ -10,7 +10,7 @@
 #include "str_echo.hpp"
 
 using namespace std;
-using namespace MiniSocket;
+using namespace mini_socket;
 
 static void doit(shared_ptr<TCPSocket> sock);
 

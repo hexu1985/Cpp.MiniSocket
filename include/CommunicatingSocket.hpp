@@ -10,7 +10,7 @@
 
 #include "Socket.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 class SocketAddressView;
 
@@ -74,6 +74,6 @@ public:
     SocketAddress getForeignAddress() const;
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

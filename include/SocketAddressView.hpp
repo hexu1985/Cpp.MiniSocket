@@ -12,7 +12,7 @@
 #include <tuple>
 #include "SocketCommon.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 封装Socket地址的引用的类, 同时支持IPv4和IPv6
@@ -68,6 +68,6 @@ private:
     socklen_t addrLen_ = 0;
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

@@ -2,7 +2,7 @@
 #include "TCPSocket.hpp"
 #include "SYSException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::shared_ptr;
 
@@ -32,4 +32,4 @@ shared_ptr<TCPSocket> TCPServerSocket::accept()
     return shared_ptr<TCPSocket>(new TCPSocket(newConnSD));
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

@@ -4,7 +4,7 @@
 #include "mini_socket.hpp"
 
 void
-str_echo(MiniSocket::TCPSocket &sock);
+str_echo(mini_socket::TCPSocket &sock);
 
 #endif
 

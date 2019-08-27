@@ -1,6 +1,6 @@
 /**
  * @file SocketException.hpp
- * @brief MiniSocket库的所有异常类的基类, 表征任何Socket相关接口的异常
+ * @brief mini_socket库的所有异常类的基类, 表征任何Socket相关接口的异常
  * @author hexu_1985@sina.com
  * @version 1.0
  * @date 2019-08-02
@@ -11,10 +11,10 @@
 #include <stdexcept>
 #include "SocketError.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
- * @brief MiniSocket库的所有异常类的基类, 表征任何Socket相关接口的异常
+ * @brief mini_socket库的所有异常类的基类, 表征任何Socket相关接口的异常
  */
 class SocketException : public std::runtime_error {
 public:
@@ -42,6 +42,6 @@ protected:
     SocketError error_;   // 统一错误码
 };
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

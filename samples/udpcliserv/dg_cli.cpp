@@ -6,7 +6,7 @@
 #include <string>
 
 using namespace std;
-using namespace MiniSocket;
+using namespace mini_socket;
 
 void
 dg_cli(istream &in, UDPSocket &sock, SocketAddress &addr)

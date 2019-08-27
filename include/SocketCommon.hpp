@@ -22,7 +22,7 @@
 #include <string>
 #include <tuple>
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /// IP版本号
 enum class NetworkLayerType {
@@ -66,8 +66,8 @@ std::string to_string(const sockaddr *sa, socklen_t salen);
  *
  * @return IP版本号
  */
-MiniSocket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_t salen);
+mini_socket::NetworkLayerType get_network_layer_type(const sockaddr *sa, socklen_t salen);
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

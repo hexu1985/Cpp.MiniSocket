@@ -5,7 +5,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace MiniSocket;
+using namespace mini_socket;
 
 void
 dg_echo(UDPSocket &sock)

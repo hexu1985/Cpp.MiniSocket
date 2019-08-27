@@ -10,7 +10,7 @@
 
 #include "SocketException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 获取地址信息类型的异常
@@ -39,6 +39,6 @@ public:
  */
 [[ noreturn ]] void gai_error(const std::string &message, int error);
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif

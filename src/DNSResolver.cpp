@@ -5,7 +5,7 @@
 #include <iostream>
 #endif
 
-namespace MiniSocket {
+namespace mini_socket {
 
 using std::shared_ptr;
 
@@ -48,4 +48,4 @@ DNSResolver::Iterator DNSResolver::query(const char *host, const char *serv,
     return query(host, serv, &hints);
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

@@ -4,7 +4,7 @@
 #include "UDPClientSocket.hpp"
 #include "SYSException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 // UDPClientSocket
 UDPClientSocket::UDPClientSocket(const SocketAddress &foreignAddress)
@@ -30,4 +30,4 @@ void UDPClientSocket::disconnect()
     }
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

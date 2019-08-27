@@ -3,6 +3,6 @@
 
 #include "mini_socket.hpp"
 
-void dg_echo(MiniSocket::UDPSocket &sock);
+void dg_echo(mini_socket::UDPSocket &sock);
 
 #endif

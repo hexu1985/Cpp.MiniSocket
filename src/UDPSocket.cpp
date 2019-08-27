@@ -1,7 +1,7 @@
 #include "UDPSocket.hpp"
 #include "SYSException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 UDPSocket::UDPSocket(const SocketAddress &localAddress)
 {
@@ -42,4 +42,4 @@ int UDPSocket::recvFrom(char *buffer, int bufferLen,
     return n;
 }
 
-}   // namesapce MiniSocket
+}   // namesapce mini_socket

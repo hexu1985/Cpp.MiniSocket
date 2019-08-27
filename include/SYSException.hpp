@@ -10,7 +10,7 @@
 
 #include "SocketException.hpp"
 
-namespace MiniSocket {
+namespace mini_socket {
 
 /**
  * @brief 系统类型的异常
@@ -48,6 +48,6 @@ public:
  */
 [[ noreturn ]] void sys_error(const std::string &message);
 
-}   // MiniSocket
+}   // mini_socket
 
 #endif
