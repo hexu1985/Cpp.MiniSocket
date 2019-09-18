@@ -13,7 +13,7 @@
 #include "SocketAddress.hpp"
 #include "SocketError.hpp"
 
-#if defined WIN32 or defined _WIN32
+#if defined (WIN32) || defined (_WIN32)
 namespace mini_socket {
 
 class _WSAStartupHolder_;

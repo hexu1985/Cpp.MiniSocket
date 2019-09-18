@@ -1,3 +1,2 @@
-cmake -Bbuild -H. 
-cmake --build build/ 
-#--target install
+cmake -Bstage -H. -DCMAKE_INSTALL_PREFIX="install"
+cmake --build stage/ --target install

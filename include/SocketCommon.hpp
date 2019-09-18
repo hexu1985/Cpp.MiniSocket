@@ -8,7 +8,7 @@
 #ifndef MINI_SOCKET_SOCKET_COMMON_INC
 #define MINI_SOCKET_SOCKET_COMMON_INC
 
-#if defined WIN32 or defined _WIN32
+#if defined (WIN32) || defined (_WIN32)
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else

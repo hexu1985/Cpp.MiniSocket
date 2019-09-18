@@ -10,14 +10,14 @@ using std::string;
 
 int get_last_sys_error()
 {
-#if defined WIN32 or defined _WIN32
+#if defined (WIN32) || defined (_WIN32)
     return WSAGetLastError();
 #else
     return errno;
 #endif
 }
 
-#if defined WIN32 or defined _WIN32
+#if defined (WIN32) || defined (_WIN32)
 string get_sys_error_str(int error)
 {
     HLOCAL hlocal = NULL;

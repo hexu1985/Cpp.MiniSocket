@@ -1,7 +1,11 @@
 #include "Socket.hpp"
 #include "SYSException.hpp"
 
-#if defined WIN32 or defined _WIN32
+#if defined (WIN32) || defined (_WIN32)
+
+#ifndef NDEBUG
+#include <iostream>
+#endif
 
 #ifndef WSVERS
 #define WSVERS MAKEWORD(2, 0)
@@ -16,7 +20,7 @@ public:
         if (WSAStartup(WSVERS, &wsadata) != 0)
             sys_error("WSAStartup error");
 #ifndef NDEBUG
-        cout << "WSAStartup ok" << endl;
+        std::cout << "WSAStartup ok" << std::endl;
 #endif
     } 
 
@@ -24,7 +28,7 @@ public:
     {
         WSACleanup();
 #ifndef NDEBUG
-        cout << "WSACleanup ok" << endl;
+        std::cout << "WSACleanup ok" << std::endl;
 #endif
     }
 
@@ -41,7 +45,7 @@ std::shared_ptr<_WSAStartupHolder_> makeSharedWSAStartupHolder()
 _WSAStartupSharedHolder_::_WSAStartupSharedHolder_()
 {
 #ifndef NDEBUG
-    cout << "_WSAStartupSharedHolder_::_WSAStartupSharedHolder_()" << endl;
+    std::cout << "_WSAStartupSharedHolder_::_WSAStartupSharedHolder_()" << std::endl;
 #endif
     sharedHolder_ = makeSharedWSAStartupHolder();
 }
@@ -49,7 +53,7 @@ _WSAStartupSharedHolder_::_WSAStartupSharedHolder_()
 _WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()
 {
 #ifndef NDEBUG
-    cout << "_WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()" << endl;
+    std::cout << "_WSAStartupSharedHolder_::~_WSAStartupSharedHolder_()" << std::endl;
 #endif
 }
 
@@ -79,7 +83,7 @@ bool Socket::open(NetworkLayerType version, TransportLayerType type, SocketError
 
 void Socket::close()
 {
-#if defined WIN32 or defined _WIN32
+#if defined (WIN32) || defined (_WIN32)
   closesocket(sockDesc_);
 #else
   shutdown(sockDesc_, SHUT_RD);
