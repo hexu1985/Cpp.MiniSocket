@@ -19,8 +19,8 @@ else()
 endif()
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
-    DESTINATION include)
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    DESTINATION .)
 
 add_subdirectory(src)
 add_subdirectory(samples/addr)
