@@ -32,9 +32,9 @@ private:
     WSADATA wsadata;
 };
 
-shared_ptr<_WSAStartupHolder_> makeSharedWSAStartupHolder()
+std::shared_ptr<_WSAStartupHolder_> makeSharedWSAStartupHolder()
 {
-    static shared_ptr<_WSAStartupHolder_> shared_holder(new _WSAStartupHolder_);
+    static std::shared_ptr<_WSAStartupHolder_> shared_holder(new _WSAStartupHolder_);
     return shared_holder;
 }
 

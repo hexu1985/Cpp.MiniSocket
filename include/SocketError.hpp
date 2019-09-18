@@ -20,13 +20,13 @@ struct SocketError {
      * @brief 错误类型
      */
     enum ErrorType {
-        NOERROR = 0,        /**< 没有错误 */
-        SYS = 1,            /**< 系统层: use errno */
-        GAI = 2,            /**< getaddrinfo接口返回的错误码: EAI_* */
-        USR = UINT16_MAX,   /**< 用户侧错误 */   
+        no_error = 0,             /**< 没有错误 */
+        sys_error = 1,            /**< 系统层: use errno */
+        gai_error = 2,            /**< getaddrinfo接口返回的错误码: EAI_* */
+        usr_error = UINT16_MAX,   /**< 用户侧错误 */   
     };
 
-    int type = NOERROR;     // 错误类型
+    int type = no_error;     // 错误类型
     int code = 0;           // 错误值
 
     /**
@@ -53,7 +53,7 @@ struct SocketError {
 inline
 SocketError make_sys_error(int error)
 {
-    return SocketError(SocketError::SYS, error);
+    return SocketError(SocketError::sys_error, error);
 }
 
 /**
@@ -66,7 +66,7 @@ SocketError make_sys_error(int error)
 inline
 SocketError make_gai_error(int error)
 {
-    return SocketError(SocketError::GAI, error);
+    return SocketError(SocketError::gai_error, error);
 }
 
 /**
