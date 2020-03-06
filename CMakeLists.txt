@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_definitions(-DNDEBUG)
+#add_definitions(-DNDEBUG)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /utf-8")
@@ -25,9 +25,4 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include"
     DESTINATION .)
 
 add_subdirectory(src)
-add_subdirectory(samples/addr)
-add_subdirectory(samples/daytimetcp)
-add_subdirectory(samples/daytimeudp)
-add_subdirectory(samples/names)
-add_subdirectory(samples/tcpcliserv)
-add_subdirectory(samples/udpcliserv)
+add_subdirectory(samples)
