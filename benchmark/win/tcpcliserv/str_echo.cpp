@@ -8,7 +8,7 @@
 void
 str_echo(SOCKET sockfd)
 {
-	ssize_t		n;
+	int		    n;
 	char		buf[MAXLINE];
 
 	while ( (n = recv(sockfd, buf, MAXLINE, 0)) > 0)

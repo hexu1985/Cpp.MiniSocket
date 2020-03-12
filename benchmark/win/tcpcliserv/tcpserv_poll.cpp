@@ -13,9 +13,9 @@ int
 main(int argc, char **argv)
 {
 	int					i, maxi;
-    SOCKET              maxfd, listenfd, connfd, sockfd;
+    SOCKET              listenfd, connfd, sockfd;
 	int					nready;
-	ssize_t				n;
+	int 				n;
 	char				buf[MAXLINE];
 	socklen_t			clilen;
 	struct pollfd		client[OPEN_MAX];

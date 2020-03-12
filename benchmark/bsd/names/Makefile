@@ -9,17 +9,17 @@ PROGS =	hostent hostent2 hostent3 hostent4 prmyaddrs
 
 all:	${PROGS}
 
-hostent:	hostent.o
-		${CC} ${CFLAGS} -o $@ $^ ${LIBS}
+hostent:	hostent.o err_quit.o
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
-hostent2:	hostent2.o
-		${CC} ${CFLAGS} -o $@ $^ ${LIBS}
+hostent2:	hostent2.o err_quit.o
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
-hostent3:	hostent3.o
-		${CC} ${CFLAGS} -o $@ $^ ${LIBS}
+hostent3:	hostent3.o err_quit.o
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
-hostent4:	hostent4.o sock_ntop.o
-		${CC} ${CFLAGS} -o $@ $^ ${LIBS}
+hostent4:	hostent4.o sock_ntop.o err_quit.o
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 prmyaddrs:	prmyaddrs.o sock_ntop.o myaddrs.o err_quit.o
 		${CC} ${CFLAGS} -o $@ $^ ${LIBS}

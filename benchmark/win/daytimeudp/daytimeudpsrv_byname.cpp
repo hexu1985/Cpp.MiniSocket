@@ -12,7 +12,7 @@ int
 main(int argc, char **argv)
 {
 	int				sockfd;
-	ssize_t			n;
+	int			    n;
 	char			buff[MAXLINE];
 	time_t			ticks;
 	socklen_t		len;
