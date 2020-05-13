@@ -22,16 +22,14 @@ public:
     /**
      * @brief DNS解析结果迭代器
      */
-    struct Iterator {
+    struct ResultIterator {
         addrinfo *res = 0;
-        std::shared_ptr<addrinfo> ressave;
 
-        Iterator(): res(nullptr)
+        ResultIterator(): res(nullptr)
         {
         }
 
-        Iterator(std::shared_ptr<addrinfo> result):
-            res(result.get()), ressave(result)
+        ResultIterator(addrinfo *res): res(res)
         {
         }
 
@@ -45,28 +43,40 @@ public:
             return SocketAddressView(res->ai_addr, res->ai_addrlen);
         }
 
-        Iterator &operator ++()
+        ResultIterator &operator ++()
         {
             next();
             return *this;
         }
 
-        Iterator operator ++(int)
+        ResultIterator operator ++(int)
         {
-            Iterator tmp(*this);
+            ResultIterator tmp(*this);
             next();
             return tmp;
         }
 
-        bool operator ==(const Iterator &rhs) const
+        bool operator ==(const ResultIterator &rhs) const
         {
             return this->res == rhs.res;
         }
 
-        bool operator !=(const Iterator &rhs) const
+        bool operator !=(const ResultIterator &rhs) const
         {
             return !(*this == rhs);
         }
+    };
+
+    /**
+     * @brief DNS解析结果集
+     */
+    struct ResultRange {
+        std::shared_ptr<addrinfo> ressave;
+
+        ResultRange(std::shared_ptr<addrinfo> ressave): ressave(ressave) {}
+
+        ResultIterator begin() const { return ResultIterator(ressave.get()); }
+        ResultIterator end() const { return ResultIterator(nullptr); }
     };
 
     /**
@@ -78,7 +88,7 @@ public:
      *
      * @return 解析结果迭代器
      */
-    Iterator query(const char *host, const char *serv, TransportLayerType trans_type); 
+    ResultRange query(const char *host, const char *serv, TransportLayerType trans_type); 
 
     /**
      * @brief DNS解析请求, 可以指定host, service, 网络层协议类型和传输层协议类型
@@ -90,45 +100,11 @@ public:
      *
      * @return 解析结果迭代器
      */
-    Iterator query(const char *host, const char *serv, NetworkLayerType net_type, TransportLayerType trans_type); 
+    ResultRange query(const char *host, const char *serv, NetworkLayerType net_type, TransportLayerType trans_type); 
 
 private:
-    Iterator query(const char *host, const char *serv, addrinfo *hints); 
+    std::shared_ptr<addrinfo> query(const char *host, const char *serv, addrinfo *hints); 
 };
-
-/**
- * @brief 获取开始迭代器
- *
- * @param iter DNS解析结果迭代器
- *
- * @return DNS解析结果迭代器的起始
- *
- * @note 为了支持如下使用方式:
- * for (auto addr: resolver.query(host, serv, TransportLayerType::TCP)) {
- *      // process addr
- * }
- */
-inline DNSResolver::Iterator begin(const DNSResolver::Iterator &iter)
-{
-    return DNSResolver::Iterator(iter.ressave);
-}
-
-/**
- * @brief 获取结束迭代器
- *
- * @param iter DNS解析结果迭代器
- *
- * @return DNS解析结果迭代器的结束
- *
- * @note 为了支持如下使用方式:
- * for (auto addr: resolver.query(host, serv, TransportLayerType::TCP)) {
- *      // process addr
- * }
- */
-inline DNSResolver::Iterator end(const DNSResolver::Iterator &iter)
-{
-    return DNSResolver::Iterator();
-}
 
 }   // mini_socket
 
