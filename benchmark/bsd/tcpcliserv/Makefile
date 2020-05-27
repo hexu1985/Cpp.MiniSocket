@@ -6,7 +6,7 @@ LIBS = -lpthread
 VPATH = ../common
 
 PROGS =	tcpcli tcpserv tcpserv_reuseaddr tcpserv_select tcpserv_poll tcpcli_select tcpserv_fork \
-		tcpserv_byname tcpcli_byname tcpcli_rcv_timeo tcpserv_rcv_timeo
+		tcpserv_byname tcpcli_byname tcpcli_rcv_timeo tcpserv_rcv_timeo tcpcli_conn_timeo tcpserv_conn_timeo
 
 all:	${PROGS}
 
@@ -41,6 +41,12 @@ tcpcli_rcv_timeo:	tcpcli_rcv_timeo.o str_cli.o send_all.o recv_until.o err_quit.
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 tcpserv_rcv_timeo: tcpserv_rcv_timeo.o str_echo.o send_all.o err_quit.o
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
+
+tcpcli_conn_timeo:	tcpcli_conn_timeo.o connect_timeo.o str_cli.o send_all.o recv_until.o err_quit.o
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
+
+tcpserv_conn_timeo: tcpserv_conn_timeo.o str_echo.o send_all.o err_quit.o
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 clean:
