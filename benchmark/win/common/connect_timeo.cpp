@@ -16,15 +16,10 @@ connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nse
 {
     int ret = 0;
     int flags = 0;
-    int saved_errno = 0;
-
-    // 获取套接字flags
-    if ((flags = fcntl(sockfd, F_GETFL, 0)) < 0) {
-        return -1;
-    }
 
     // 设置套接字为非阻塞的
-    if (fcntl(sockfd, F_SETFL, flags | O_NONBLOCK) < 0) {
+    unsigned long block = 1;
+    if (ioctlsocket(sockfd, FIONBIO, &block) == SOCKET_ERROR) {
         return -1;
     }
 
@@ -34,11 +29,10 @@ connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nse
     // 任何其他错误，则要进行错误处理
     ret = connect(sockfd, saptr, salen);
     if (ret == 0) {     // connect ok
-        ret = 1;
         goto restore_flags;
     } 
-    if (ret < 0 && errno != EINPROGRESS) {  // 其他错误
-        saved_errno = errno;
+    if (ret == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK) {  // 其他错误
+        ret = -1;
         goto restore_flags;
     }
 
@@ -51,17 +45,14 @@ connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nse
     FD_ZERO(&fdset);
     FD_SET(sockfd, &fdset);
 
-    ret = select(sockfd+1, NULL, &fdset, NULL, &tv);
+    ret = select(0, NULL, &fdset, NULL, &tv);
     // ret < 0 错误处理
     // ret == 0 select超时
     // ret == 1 connect ok
-    if (ret < 0) {  // 错误处理
-        saved_errno = errno;
-    } 
 
 restore_flags:
-    fcntl(sockfd, F_SETFL, flags);
-    errno = saved_errno;
+    block = 0;
+    ioctlsocket(sockfd, FIONBIO, &block);
     return ret;
 }
 

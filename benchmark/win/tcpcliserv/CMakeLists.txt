@@ -24,3 +24,15 @@ target_link_libraries(tcpcli_rcv_timeo ${UNP_LIB} ${LIBS_SYSTEM})
 add_executable(tcpserv_rcv_timeo tcpserv_rcv_timeo.cpp str_echo.cpp)
 target_link_libraries(tcpserv_rcv_timeo ${UNP_LIB} ${LIBS_SYSTEM})
 
+add_executable(tcpcli_conn_timeo tcpcli_conn_timeo.cpp str_cli.cpp)
+target_link_libraries(tcpcli_conn_timeo ${UNP_LIB} ${LIBS_SYSTEM})
+
+add_executable(tcpserv_conn_timeo tcpserv_conn_timeo.cpp str_echo.cpp)
+target_link_libraries(tcpserv_conn_timeo ${UNP_LIB} ${LIBS_SYSTEM})
+
+add_executable(tcpcli_conn_timeo tcpcli_conn_timeo.cpp)
+target_link_libraries(tcpcli_conn_timeo ${UNP_LIB} ${LIBS_SYSTEM})
+
+add_executable(tcpserv_conn_timeo tcpserv_conn_timeo.cpp)
+target_link_libraries(tcpserv_conn_timeo ${UNP_LIB} ${LIBS_SYSTEM})
+
