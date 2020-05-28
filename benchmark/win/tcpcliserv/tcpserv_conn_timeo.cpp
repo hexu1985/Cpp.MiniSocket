@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     if (bind(listenfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) == SOCKET_ERROR)
         err_quit("bind error");
 
-    if (listen(listenfd, LISTENQ) == SOCKET_ERROR)
+    if (listen(listenfd, 1) == SOCKET_ERROR)
         err_quit("listen error");
 
     while (true) {

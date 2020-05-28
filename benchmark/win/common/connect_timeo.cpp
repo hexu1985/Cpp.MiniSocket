@@ -1,21 +1,14 @@
 /* include connect_timeo */
 #include "connect_timeo.hpp"
-#include <errno.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/select.h>
-#include <sys/time.h>
-#include <sys/types.h>
 
 // 指定超时时间的connect函数
 // connect成功返回1，
 // connect报错返回-1，
 // connect超时返回0
 int
-connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nsec)
+connect_timeo(SOCKET sockfd, const struct sockaddr *saptr, socklen_t salen, int nsec)
 {
     int ret = 0;
-    int flags = 0;
 
     // 设置套接字为非阻塞的
     unsigned long block = 1;

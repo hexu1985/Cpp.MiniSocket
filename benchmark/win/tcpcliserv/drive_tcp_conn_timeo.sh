@@ -15,5 +15,5 @@ done
 ./tcpcli_conn_timeo 127.0.0.1 $SRV_PORT 
 
 kill $SRV_PID
-killall tcpcli_conn_timeo 
-
+#killall tcpcli_conn_timeo 
+ps -ef | grep tcpcli_conn_timeo | awk '{print $2}' | xargs kill -9

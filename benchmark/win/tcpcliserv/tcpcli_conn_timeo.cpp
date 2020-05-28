@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <iostream>
+#include <thread>
 
 #include "config.hpp"
 #include "err_quit.hpp"
@@ -15,6 +17,7 @@ int main(int argc, char **argv)
     struct sockaddr_in	servaddr;
     unsigned short      port = SERV_PORT;
     WSADATA             wsadata;
+    int                 n;
 
     if (argc != 2 && argc != 3)
         err_quit("usage: a.out <IPaddress> [port]");
