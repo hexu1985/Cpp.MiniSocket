@@ -7,11 +7,16 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
+// 指定超时时间的connect函数
+// connect成功返回1，
+// connect报错返回-1，
+// connect超时返回0
 int
 connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nsec)
 {
     int ret = 0;
     int flags = 0;
+    int saved_errno = 0;
 
     // 获取套接字flags
     if ((flags = fcntl(sockfd, F_GETFL, 0)) < 0) {
@@ -29,9 +34,11 @@ connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nse
     // 任何其他错误，则要进行错误处理
     ret = connect(sockfd, saptr, salen);
     if (ret == 0) {     // connect ok
+        ret = 1;
         goto restore_flags;
     } 
     if (ret < 0 && errno != EINPROGRESS) {  // 其他错误
+        saved_errno = errno;
         goto restore_flags;
     }
 
@@ -45,18 +52,17 @@ connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nse
     FD_SET(sockfd, &fdset);
 
     ret = select(sockfd+1, NULL, &fdset, NULL, &tv);
+    // ret < 0 错误处理
+    // ret == 0 select超时
+    // ret == 1 connect ok
     if (ret < 0) {  // 错误处理
+        saved_errno = errno;
         goto restore_flags;
-    } else if (ret == 0) {  // select超时
-        ret = -1;
-        errno = ETIMEDOUT;
-        goto restore_flags;
-    } else { // ret == 1 connect ok
-        ret = 0;
-    }
+    } 
 
 restore_flags:
     fcntl(sockfd, F_SETFL, flags);
+    errno = saved_errno;
     return ret;
 }
 

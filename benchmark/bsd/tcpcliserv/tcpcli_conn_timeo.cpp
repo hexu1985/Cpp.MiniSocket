@@ -19,6 +19,7 @@ main(int argc, char **argv)
 	int					sockfd;
 	struct sockaddr_in	servaddr;
     unsigned short      port = SERV_PORT;
+    int                 n;
 
     if (argc != 2 && argc != 3)
         err_quit("usage: a.out <IPaddress> [port]");
@@ -35,15 +36,14 @@ main(int argc, char **argv)
     if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0)
         err_quit("inet_pton error for %s", argv[1]);
 
-    if (connect_timeo(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr), 5) < 0) {
-        if (errno == ETIMEDOUT) {
-            err_quit("connect timeout");
-        } else {
-            err_quit("connect error");
-        }
+    n = connect_timeo(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr), 5);
+    if (n < 0) {
+        err_quit("connect error");
+    } else if (n == 0) {
+        err_quit("connect timeout");
+    } else {
+        std::cout << "connect to " << argv[1] << " : " << port << " ok!" << std::endl;
     }
-
-    std::cout << "connect to " << argv[1] << " : " << port << " ok!" << std::endl;
 
     while (true) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
