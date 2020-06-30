@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <iostream>
 
 #include "config.hpp"
 #include "err_quit.hpp"
@@ -29,17 +28,6 @@ int main(int argc, char **argv)
     if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
         err_quit("socket error");
 
-    unsigned long block = 1;
-    std::cout << "block before ioctlsocket: " << block << std::endl;
-    ioctlsocket((unsigned int)sockfd, FIONBIO, &block);
-    std::cout << "block before after: " << block << std::endl;
-
-    block = 0;
-    std::cout << "block before ioctlsocket: " << block << std::endl;
-    ioctlsocket((unsigned int)sockfd, FIONBIO, &block);
-    std::cout << "block before after: " << block << std::endl;
-
-#if 0
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(port);
@@ -50,7 +38,6 @@ int main(int argc, char **argv)
         err_quit("connect error");
 
     str_cli(stdin, sockfd);		/* do it all */
-#endif
     closesocket(sockfd);
 
     WSACleanup();
