@@ -51,5 +51,7 @@ main(int argc, char **argv)
         i++;
     }
 
+    close(sockfd);
+
 	exit(0);
 }
