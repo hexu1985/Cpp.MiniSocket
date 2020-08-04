@@ -36,3 +36,9 @@ target_link_libraries(tcpcli_conn_timeo ${UNP_LIB} ${LIBS_SYSTEM})
 add_executable(tcpserv_conn_timeo tcpserv_conn_timeo.cpp)
 target_link_libraries(tcpserv_conn_timeo ${UNP_LIB} ${LIBS_SYSTEM})
 
+add_executable(tcpcli_snd_timeo tcpcli_snd_timeo.cpp)
+target_link_libraries(tcpcli_snd_timeo ${UNP_LIB} ${LIBS_SYSTEM})
+
+add_executable(tcpserv_snd_timeo tcpserv_snd_timeo.cpp)
+target_link_libraries(tcpserv_snd_timeo ${UNP_LIB} ${LIBS_SYSTEM})
+

@@ -29,10 +29,8 @@ main(int argc, char **argv)
     if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         err_quit("socket error");
 
-#if 0
     if ( setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) < 0)
         err_quit("setsockopt error");
-#endif
 
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
