@@ -7,7 +7,7 @@
 
 #include "config.hpp"
 #include "err_quit.hpp"
-#include "str_cli.hpp"
+#include "send_all.hpp"
 
 int main(int argc, char **argv)
 {
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
         err_quit("socket error");
 
-    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout)) == SOCKET_ERROR)
+    if (setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout, sizeof(timeout)) == SOCKET_ERROR)
         err_quit("setsockopt error");
 
     memset(&servaddr, 0, sizeof(servaddr));
