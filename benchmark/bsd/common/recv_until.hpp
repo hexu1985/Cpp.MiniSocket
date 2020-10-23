@@ -14,5 +14,6 @@
  * @return 如果成功返回读取字节数(>= 0, 0表示EOF-对端close), 否则返回-1
  */
 ssize_t recv_until(int sockfd, void *buffer, size_t maxlen, char term);
+ssize_t recv_until(int sockfd, void *buffer, size_t maxlen);
 
 #endif

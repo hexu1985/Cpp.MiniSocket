@@ -53,3 +53,22 @@ recv_until(int sockfd, void *buffer, size_t maxlen, char term)
 	return(n);
 }
 
+ssize_t
+recv_until(int sockfd, void *buffer, size_t maxlen)
+{
+	ssize_t	n, rc;
+	char	c, *ptr;
+
+	ptr = (char *) buffer;
+	for (n = 0; n < maxlen; n++) {
+		if ( (rc = my_recv(sockfd, &c)) == 1) {
+			*ptr++ = c;
+		} else if (rc == 0) {
+			*ptr = 0;
+			return(n - 1);	/* EOF, n - 1 bytes were recv */
+		} else
+			return(-1);		/* error, errno set by recv() */
+	}
+
+	return(n);
+}
