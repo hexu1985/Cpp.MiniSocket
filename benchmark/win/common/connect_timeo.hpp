@@ -4,6 +4,6 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-int      connect_timeo(SOCKET, const struct sockaddr *, socklen_t, int);
+int connect_timeo(SOCKET, const struct sockaddr *, socklen_t, int);
 
 #endif

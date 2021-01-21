@@ -1,5 +1,5 @@
-#ifndef	__unp_sock_ntop_h
-#define	__unp_sock_ntop_h
+#ifndef	UNP_SOCK_NTOP_INC
+#define	UNP_SOCK_NTOP_INC
 
 #include <winsock2.h>
 #include <ws2tcpip.h>

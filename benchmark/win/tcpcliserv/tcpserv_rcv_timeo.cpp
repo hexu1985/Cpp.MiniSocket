@@ -11,14 +11,14 @@
 #include "err_quit.hpp"
 #include "str_echo.hpp"
 
-static void	doit(SOCKET sockfd);		/* each thread executes this function */
+static void doit(SOCKET sockfd);  /* each thread executes this function */
 
 int main(int argc, char **argv)
 {
-    SOCKET				listenfd, connfd;
-    socklen_t			clilen;
-    struct sockaddr_in	cliaddr, servaddr;
-    unsigned short		port = SERV_PORT;
+    SOCKET              listenfd, connfd;
+    socklen_t           clilen;
+    struct sockaddr_in  cliaddr, servaddr;
+    unsigned short      port = SERV_PORT;
     WSADATA             wsadata;
 
     if (argc != 1 && argc != 2)
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family      = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port        = htons(port);	/* daytime server */
+    servaddr.sin_port        = htons(port); /* daytime server */
 
     if (bind(listenfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) == SOCKET_ERROR)
         err_quit("bind error");
@@ -55,10 +55,9 @@ int main(int argc, char **argv)
     WSACleanup();
 }
 
-static void
-doit(SOCKET sockfd)
+static void doit(SOCKET sockfd)
 {
     std::this_thread::sleep_for(std::chrono::seconds(10));
-    str_echo(sockfd);	        /* process the request */
-    closesocket(sockfd);		/* done with connected socket */
+    str_echo(sockfd);         /* process the request */
+    closesocket(sockfd);  /* done with connected socket */
 }

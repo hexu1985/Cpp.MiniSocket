@@ -11,11 +11,11 @@
 
 int main(int argc, char **argv)
 {
-    SOCKET				sockfd;
-    struct sockaddr_in	servaddr;
-    unsigned short      port = SERV_PORT;
-    WSADATA             wsadata;
-    int timeout = 5000;
+    SOCKET             sockfd;
+    struct sockaddr_in servaddr;
+    unsigned short     port = SERV_PORT;
+    WSADATA            wsadata;
+    int                timeout = 5000;
 
     if (argc != 2 && argc != 3)
         err_quit("usage: a.out <IPaddress> [port]");
@@ -44,8 +44,8 @@ int main(int argc, char **argv)
     char snd_buf[1000] = {0};
     int i = 0;
     while (true) {
-		if(send_all(sockfd, snd_buf, 1000) < 0) {
-			err_quit("send_all error");
+        if(send_all(sockfd, snd_buf, 1000) < 0) {
+            err_quit("send_all error");
         }
         printf("send %d KB ok!\n", i);
         i++;

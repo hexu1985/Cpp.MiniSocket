@@ -11,10 +11,10 @@
 
 int main(int argc, char **argv)
 {
-    SOCKET				sockfd;
-    struct sockaddr_in	servaddr;
-    unsigned short      port = SERV_PORT;
-    WSADATA             wsadata;
+    SOCKET             sockfd;
+    struct sockaddr_in servaddr;
+    unsigned short     port = SERV_PORT;
+    WSADATA            wsadata;
 
     if (argc != 2 && argc != 3)
         err_quit("usage: a.out <IPaddress> [port]");
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     if (WSAStartup(WSVERS, &wsadata) != 0)
         err_quit("WSAStartup failed");
 
-    if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
         err_quit("socket error");
 
     memset(&servaddr, 0, sizeof(servaddr));
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     if (connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) == SOCKET_ERROR)
         err_quit("connect error");
 
-    str_cli(stdin, sockfd);		/* do it all */
+    str_cli(stdin, sockfd);  /* do it all */
     closesocket(sockfd);
 
     WSACleanup();

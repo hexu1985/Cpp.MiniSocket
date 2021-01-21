@@ -3,8 +3,7 @@
 
 #include <string>
 
-inline
-std::string WSAGetLastErrorString()
+inline std::string WSAGetLastErrorString()
 {
     HLOCAL hlocal = NULL;
     FormatMessage(

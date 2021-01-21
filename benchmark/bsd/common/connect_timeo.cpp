@@ -11,8 +11,7 @@
 // connect成功返回1，
 // connect报错返回-1，
 // connect超时返回0
-int
-connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nsec)
+int connect_timeo(int sockfd, const struct sockaddr *saptr, socklen_t salen, int nsec)
 {
     int ret = 0;
     int flags = 0;

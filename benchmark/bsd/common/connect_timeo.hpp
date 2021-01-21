@@ -3,6 +3,6 @@
 
 #include <sys/socket.h>
 
-int      connect_timeo(int, const struct sockaddr *, socklen_t, int);
+int connect_timeo(int, const struct sockaddr *, socklen_t, int);
 
 #endif

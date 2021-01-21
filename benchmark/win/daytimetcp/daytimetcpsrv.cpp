@@ -11,10 +11,10 @@
 
 int main(int argc, char *argv[])
 {
-    SOCKET				listenfd, connfd;
-    struct sockaddr_in	servaddr;
-    char				buff[MAXLINE];
-    time_t				ticks;
+    SOCKET              listenfd, connfd;
+    struct sockaddr_in  servaddr;
+    char                buff[MAXLINE];
+    time_t              ticks;
     unsigned short      port = 13;
     WSADATA             wsadata;
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family      = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port        = htons(port);	/* daytime server */
+    servaddr.sin_port        = htons(port); /* daytime server */
 
     if (bind(listenfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) == SOCKET_ERROR)
         err_quit("bind error");
