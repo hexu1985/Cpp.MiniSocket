@@ -9,7 +9,7 @@ PROGS =	get_if_info
 
 all:	${PROGS}
 
-get_if_info:	get_if_info.o err_quit.o
+get_if_info:	get_if_info.o err_quit.o sock_ntop.o
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 clean:
