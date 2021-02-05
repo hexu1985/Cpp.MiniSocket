@@ -5,11 +5,11 @@ CXXFLAGS = -Wall -g -O2 ${INCLUDE} -std=c++11
 LIBS = -lpthread
 VPATH = ../common
 
-PROGS =	net_monitor
+PROGS =	netstat_monitor
 
 all:	${PROGS}
 
-net_monitor:	net_monitor.o err_quit.o sock_ntop.o
+netstat_monitor:	netstat_monitor.o err_quit.o sock_ntop.o
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 clean:
