@@ -22,7 +22,7 @@ hostent4:	hostent4.o sock_ntop.o err_quit.o
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 prmyaddrs:	prmyaddrs.o sock_ntop.o myaddrs.o err_quit.o
-		${CC} ${CFLAGS} -o $@ $^ ${LIBS}
+		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 clean:
 		rm -f ${PROGS} ${CLEANFILES} *.o
