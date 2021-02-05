@@ -18,6 +18,8 @@
 void get_if_info(int sockfd);
 void get_if_hwaddr(int sockfd, const char *ifname);
 void get_if_ipaddr(int sockfd, const char *ifname);
+void get_if_netmask(int sockfd, const char *ifname);
+void get_if_flags(int sockfd, const char *ifname);
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +58,11 @@ void get_if_info(int sockfd)
 
         printf("\n\t\t");
         get_if_ipaddr(sockfd, ifr_arr[i].ifr_name);
+        printf("\t");
+        get_if_netmask(sockfd, ifr_arr[i].ifr_name);
 
+        printf("\n\t\t");
+        get_if_flags(sockfd, ifr_arr[i].ifr_name);
         printf("\n\n");
 
     }
@@ -110,11 +116,52 @@ void get_if_ipaddr(int sockfd, const char *ifname)
     strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
 
     if (ioctl(sockfd, SIOCGIFADDR, &ifr) < 0) {
-        if (errno == EADDRNOTAVAIL) {   // No IPv4 address assigned
-            return;
-        }
         err_quit("ioctl error: SIOCGIFADDR");
     }
 
     printf("inet addr:%s", sock_ntop(&ifr.ifr_addr, 0));
+}
+
+void get_if_netmask(int sockfd, const char *ifname)
+{
+    struct ifreq ifr;
+    memset(&ifr, 0, sizeof(ifr));
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+    if (ioctl(sockfd, SIOCGIFNETMASK, &ifr) < 0) {
+        err_quit("ioctl error: SIOCGIFNETMASK");
+    }
+
+    printf("netmask:%s", sock_ntop(&ifr.ifr_addr, 0));
+}
+
+void get_if_flags(int sockfd, const char *ifname)
+{
+    struct ifreq ifr;
+    memset(&ifr, 0, sizeof(ifr));
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+    if (ioctl(sockfd, SIOCGIFFLAGS, &ifr) < 0) {
+        err_quit("ioctl error: SIOCGIFFLAGS");
+    }
+
+    short flags = ifr.ifr_flags;
+
+    if (flags & IFF_UP)
+        printf("UP ");
+
+    if (flags & IFF_RUNNING)
+        printf("RUNNING ");
+
+    if (flags & IFF_LOOPBACK)
+        printf("LOOPBACK ");
+
+    if (flags & IFF_BROADCAST)
+        printf("BROADCAST ");
+
+    if (flags & IFF_MULTICAST)
+        printf("MULTICAST ");
+
+    if (flags & IFF_PROMISC)
+        printf("PROMISC");
 }
