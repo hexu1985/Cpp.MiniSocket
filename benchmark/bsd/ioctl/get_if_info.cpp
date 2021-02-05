@@ -20,6 +20,7 @@ void get_if_hwaddr(int sockfd, const char *ifname);
 void get_if_ipaddr(int sockfd, const char *ifname);
 void get_if_netmask(int sockfd, const char *ifname);
 void get_if_flags(int sockfd, const char *ifname);
+void get_if_mtu(int sockfd, const char *ifname);
 
 int main(int argc, char *argv[])
 {
@@ -63,6 +64,9 @@ void get_if_info(int sockfd)
 
         printf("\n\t\t");
         get_if_flags(sockfd, ifr_arr[i].ifr_name);
+        printf("\t");
+        get_if_mtu(sockfd, ifr_arr[i].ifr_name);
+
         printf("\n\n");
 
     }
@@ -164,4 +168,17 @@ void get_if_flags(int sockfd, const char *ifname)
 
     if (flags & IFF_PROMISC)
         printf("PROMISC");
+}
+
+void get_if_mtu(int sockfd, const char *ifname)
+{
+    struct ifreq ifr;
+    memset(&ifr, 0, sizeof(ifr));
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
+
+    if (ioctl(sockfd, SIOCGIFMTU, &ifr) < 0) {
+        err_quit("ioctl error: SIOCGIFMTU");
+    }
+
+    printf("MTU:%d", ifr.ifr_mtu);
 }
