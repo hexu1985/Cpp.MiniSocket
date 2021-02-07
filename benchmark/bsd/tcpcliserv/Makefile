@@ -44,7 +44,7 @@ tcpcli_rcv_timeo:	tcpcli_rcv_timeo.o str_cli.o send_all.o recv_until.o err_quit.
 tcpserv_rcv_timeo: tcpserv_rcv_timeo.o str_echo.o send_all.o err_quit.o
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
-tcpcli_conn_timeo:	tcpcli_conn_timeo.o connect_timeo.o err_quit.o
+tcpcli_conn_timeo:	tcpcli_conn_timeo.o connect_nonb.o err_quit.o
 		${CXX} ${CXXFLAGS} -o $@ $^ ${LIBS}
 
 tcpserv_conn_timeo: tcpserv_conn_timeo.o err_quit.o

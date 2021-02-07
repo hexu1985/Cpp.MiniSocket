@@ -11,7 +11,7 @@
 
 #include "config.hpp"
 #include "err_quit.hpp"
-#include "connect_timeo.hpp"
+#include "connect_nonb.hpp"
 
 int main(int argc, char **argv)
 {
@@ -35,11 +35,13 @@ int main(int argc, char **argv)
     if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0)
         err_quit("inet_pton error for %s", argv[1]);
 
-    n = connect_timeo(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr), 5);
+    n = connect_nonb(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr), 5);
     if (n < 0) {
-        err_quit("connect error");
-    } else if (n == 0) {
-        err_quit("connect timeout");
+        if (errno == ETIMEDOUT) {
+            err_quit("connect timeout");
+        } else {
+            err_quit("connect error");
+        }
     } else {
         std::cout << "connect to " << argv[1] << " : " << port << " ok!" << std::endl;
     }

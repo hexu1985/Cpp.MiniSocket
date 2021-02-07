@@ -21,9 +21,11 @@ int main(int argc, char **argv)
         err_quit("tcp_connect error");
 
     len = sizeof(ss);
-    if (getpeername(sockfd, (struct sockaddr *)&ss, &len) < 0)
-        err_quit("getpeername error");
-    printf("connected to %s ok\n", sock_ntop_host((struct sockaddr *)&ss, len));
+    if (getpeername(sockfd, (struct sockaddr *)&ss, &len) < 0) {
+        printf("connected to %s ok\n", argv[1]);
+    } else {
+        printf("connected to %s ok\n", sock_ntop_host((struct sockaddr *)&ss, len));
+    }
 
     close(sockfd);
 

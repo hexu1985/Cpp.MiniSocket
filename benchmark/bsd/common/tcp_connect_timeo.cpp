@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #include "err_quit.hpp"
-#include "connect_timeo.hpp"
+#include "connect_nonb.hpp"
 
 int tcp_connect_timeo(const char *host, const char *serv, int nsec)
 {
@@ -30,16 +30,8 @@ int tcp_connect_timeo(const char *host, const char *serv, int nsec)
         if (sockfd < 0)
             continue;  /* ignore this one */
 
-        int ret = connect_timeo(sockfd, res->ai_addr, res->ai_addrlen, nsec);
-        if (ret > 0) {
-            break; /* success */
-        } else if (ret == 0) {
-            printf("connect timeout\n");
-            continue;
-        } else {
-            printf("connect fail\n");
-            continue;
-        }
+        if (connect_nonb(sockfd, res->ai_addr, res->ai_addrlen, nsec) == 0)
+            break;    /* success */
 
         close(sockfd);  /* ignore this one */
     } while ((res = res->ai_next) != NULL);
