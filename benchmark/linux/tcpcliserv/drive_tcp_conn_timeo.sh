@@ -12,8 +12,8 @@ do
     ./tcpcli_conn_timeo 127.0.0.1 $SRV_PORT &
 done
 
-./tcpcli_conn_timeo 127.0.0.1 $SRV_PORT 
+#./tcpcli_conn_timeo 127.0.0.1 $SRV_PORT 
 
-kill $SRV_PID
-killall tcpcli_conn_timeo 
+#kill $SRV_PID
+#killall tcpcli_conn_timeo 
 
