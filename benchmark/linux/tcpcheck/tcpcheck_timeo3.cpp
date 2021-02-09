@@ -82,7 +82,14 @@ int tcp_connect_timeo(const char *host, const char *serv, int nsec)
         return -1;
     }
 
+    struct AddrinfoGuard {
+        addrinfo *res_;
+        AddrinfoGuard(struct addrinfo *res): res_(res) {}
+        ~AddrinfoGuard() { freeaddrinfo(res_); }
+    }; 
+
     res = reqs[0]->ar_result;
+    AddrinfoGuard guard(res);
     if (res == NULL) {
         fprintf(stderr, "tcp_connect error for %s, %s\n", host, serv);
         return -1;
@@ -91,18 +98,14 @@ int tcp_connect_timeo(const char *host, const char *serv, int nsec)
     sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sockfd < 0) {
         fprintf(stderr, "tcp_connect error: socket error\n");
-        freeaddrinfo(res);
         return -1;
     }
 
     if (connect_nonb(sockfd, res->ai_addr, res->ai_addrlen, nsec) < 0) {
         fprintf(stderr, "tcp_connect error: connect_nonb error for %s, %s\n", host, serv);
         perror("connect error");
-        freeaddrinfo(res);
         return -1;
     } 
-
-    freeaddrinfo(res);
 
     return (sockfd);
 }
